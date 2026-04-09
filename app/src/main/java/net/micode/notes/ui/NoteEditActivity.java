@@ -90,7 +90,7 @@ import java.util.regex.Pattern; // 正则表达式编译类，用于定义匹配
 public class NoteEditActivity extends Activity implements OnClickListener,
         NoteSettingChangedListener, OnTextViewChangeListener {
     /* 
-       内部类: HeadViewHolder
+       内部类: HeadViewHolder头部视图持有者
        作用: ViewHolder 模式，缓存标题栏控件引用，优化 ListView/复杂布局性能。
     */
     private class HeadViewHolder {
@@ -209,69 +209,98 @@ public class NoteEditActivity extends Activity implements OnClickListener,
     }
 
     /**
-     * Current activity may be killed when the memory is low. Once it is killed, for another time
-     * user load this activity, we should restore the former state
+     * 核心方法：恢复实例状态
+     * 
+     * 场景说明：
+     * 1. 当系统内存不足时，Android 系统可能会杀死后台的 Activity（例如用户按 Home 键后，应用在后台运行了很久）。
+     * 2. 当用户再次从任务列表（最近任务）回到这个 Activity 时，系统不会调用 onCreate，而是调用 onRestoreInstanceState。
+     * 3. 我们需要利用这个机会，把之前保存在 Bundle 里的 Note ID 取出来，重新加载数据，让用户感觉不到 Activity 曾被杀死过。
      */
     @Override
     protected void onRestoreInstanceState(Bundle savedInstanceState) {
+        //把恢复界面控件状态的任务交给系统去做
         super.onRestoreInstanceState(savedInstanceState);
+        
+        // 1. 安全检查：确保 Bundle 不为空，且里面包含我们保存的 Note ID (Intent.EXTRA_UID)
         if (savedInstanceState != null && savedInstanceState.containsKey(Intent.EXTRA_UID)) {
+            
+            // 2. 重建 Intent：模拟一个“查看便签”的动作
             Intent intent = new Intent(Intent.ACTION_VIEW);
+            
+            // 3. 从 Bundle 中取出之前保存的 Note ID
+            // 这个 ID 是在 onSaveInstanceState 中通过 outState.putLong(...) 保存的
+            //把刚才从‘存档’里读出来的便签ID，重新塞进一张新的‘快递单’（Intent）里
+            //intent.putExtra(...)填单
             intent.putExtra(Intent.EXTRA_UID, savedInstanceState.getLong(Intent.EXTRA_UID));
+            
+            // 4. 重新初始化状态：根据取出的 ID 去数据库加载便签内容
             if (!initActivityState(intent)) {
+                // 如果初始化失败（比如 ID 对应的便签已经被删除了），则直接关闭当前页面，防止崩溃或显示空壳
                 finish();
                 return;
             }
+            
+            // 5. 打印日志，标记这是一次“死而复生”的恢复过程
             Log.d(TAG, "Restoring from killed activity");
         }
     }
-
 // 核心逻辑方法: initActivityState (页面入口分流)
     private boolean initActivityState(Intent intent) {
-        /**
-         * If the user specified the {@link Intent#ACTION_VIEW} but not provided with id,
-         * then jump to the NotesListActivity
-         */
+
         mWorkingNote = null;
-    /* 
-       分支 1: Intent.ACTION_VIEW (查看/编辑已有便签)
-       流程:
-         1. 从 Intent 中解析便签 ID (EXTRA_UID)。
-         2. 检查数据库中是否存在该 ID (DataUtils.visibleInNoteDatabase)。
-         3. 若不存在: 跳转回 NotesListActivity 并提示错误。
-            跳转逻辑: startActivity(new Intent(this, NotesListActivity.class));
-         4. 若存在: 使用 WorkingNote.load() 从数据库加载数据到内存对象。
-    */
+
+        // 判断用户的意图是否是“查看”某条便签（通常是从桌面快捷方式、通知栏或搜索点击进来的）
         if (TextUtils.equals(Intent.ACTION_VIEW, intent.getAction())) {
+            
+            // 1. 尝试获取便签ID
+            // 默认从 EXTRA_UID 中获取，如果没有则默认为 0
             long noteId = intent.getLongExtra(Intent.EXTRA_UID, 0);
-            mUserQuery = "";
+            mUserQuery = ""; // 初始化用户搜索词为空
 
             /**
-             * Starting from the searched result
+             * 特殊情况处理：如果是从“搜索结果”点击进来的
              */
             if (intent.hasExtra(SearchManager.EXTRA_DATA_KEY)) {
+                // 搜索结果的 ID 通常存在 EXTRA_DATA_KEY 里，且是字符串格式，需要解析
                 noteId = Long.parseLong(intent.getStringExtra(SearchManager.EXTRA_DATA_KEY));
+                // 同时取出用户的搜索关键词，可能用于后续的高亮显示
                 mUserQuery = intent.getStringExtra(SearchManager.USER_QUERY);
             }
 
+            // 2. 安全检查：去数据库查询这个 ID 是否存在且可见
+            // 防止用户点击了过期的快捷方式或通知，导致打开不存在的便签
             if (!DataUtils.visibleInNoteDatabase(getContentResolver(), noteId, Notes.TYPE_NOTE)) {
+                // 如果便签不存在（可能被删除了）：
+                
+                // A. 准备跳转回列表页
                 Intent jump = new Intent(this, NotesListActivity.class);
                 startActivity(jump);
+                
+                // B. 提示用户“便签不存在”
                 showToast(R.string.error_note_not_exist);
+                
+                // C. 结束当前页面，防止打开一个空壳
                 finish();
                 return false;
             } else {
+                // 3. 加载数据：如果便签存在，则从数据库加载具体内容
                 mWorkingNote = WorkingNote.load(this, noteId);
+                
+                // 双重保险：如果加载出来的对象是空的，说明出了严重错误
                 if (mWorkingNote == null) {
                     Log.e(TAG, "load note failed with note id" + noteId);
-                    finish();
+                    finish(); // 关闭页面
                     return false;
                 }
             }
+            
+            // 4. 窗口设置：设置软键盘模式
+            // STATE_HIDDEN: 页面打开时默认隐藏键盘（因为是查看模式，不是新建模式）
+            // ADJUST_RESIZE: 当键盘弹出时，调整界面大小，防止输入框被遮挡
             getWindow().setSoftInputMode(
                     WindowManager.LayoutParams.SOFT_INPUT_STATE_HIDDEN
                             | WindowManager.LayoutParams.SOFT_INPUT_ADJUST_RESIZE);
-        } 
+        }
             /* 
        分支 2: Intent.ACTION_INSERT_OR_EDIT (创建新便签)
        流程:
@@ -280,26 +309,42 @@ public class NoteEditActivity extends Activity implements OnClickListener,
             - 如果有: 尝试查找已有的通话记录便签，没有则创建新的通话便签 (convertToCallNote)。
          3. 普通处理: 调用 WorkingNote.createEmptyNote() 创建一个全新的空便签对象。
     */
+        // 如果不是查看模式，而是“新建或编辑”模式（通常是点击“新建便签”按钮，或从桌面挂件进入）
         else if(TextUtils.equals(Intent.ACTION_INSERT_OR_EDIT, intent.getAction())) {
-            // New note
+            
+            // --- 1. 获取基础参数 ---
+            // 获取文件夹ID（如果是从某个文件夹里点击新建，需要知道归属）
             long folderId = intent.getLongExtra(Notes.INTENT_EXTRA_FOLDER_ID, 0);
+            
+            // 获取挂件信息（如果是桌面挂件点击进来的，需要记录是哪个挂件，以便后续更新桌面）
             int widgetId = intent.getIntExtra(Notes.INTENT_EXTRA_WIDGET_ID,
                     AppWidgetManager.INVALID_APPWIDGET_ID);
             int widgetType = intent.getIntExtra(Notes.INTENT_EXTRA_WIDGET_TYPE,
                     Notes.TYPE_WIDGET_INVALIDE);
+            
+            // 获取背景样式ID（如果没有指定，就用系统默认背景）
             int bgResId = intent.getIntExtra(Notes.INTENT_EXTRA_BACKGROUND_ID,
                     ResourceParser.getDefaultBgId(this));
 
-            // Parse call-record note
+            // --- 2. 特殊处理：通话记录便签 ---
+            // 尝试获取电话号码和通话时间。如果这两个都有值，说明是“通话记录”场景
             String phoneNumber = intent.getStringExtra(Intent.EXTRA_PHONE_NUMBER);
             long callDate = intent.getLongExtra(Notes.INTENT_EXTRA_CALL_DATE, 0);
+            
+            // 如果既有号码又有时间，说明这是一条“通话便签”
             if (callDate != 0 && phoneNumber != null) {
+                // 安全检查：虽然上面判断了不为空，但这里还是防御性地检查一下号码是否为空字符串
                 if (TextUtils.isEmpty(phoneNumber)) {
                     Log.w(TAG, "The call record number is null");
                 }
+                
                 long noteId = 0;
+                // 核心逻辑：去数据库查一下，这个电话号码在这个时间点，是否已经存在便签了？
+                // 目的是防止重复创建。比如你挂了电话点一次“记录”，系统已经建了一条，你再点就不应该新建，而是编辑旧的。
                 if ((noteId = DataUtils.getNoteIdByPhoneNumberAndCallDate(getContentResolver(),
                         phoneNumber, callDate)) > 0) {
+                    
+                    // 情况A：便签已存在 -> 加载它（编辑模式）防御性编程
                     mWorkingNote = WorkingNote.load(this, noteId);
                     if (mWorkingNote == null) {
                         Log.e(TAG, "load call note failed with note id" + noteId);
@@ -307,19 +352,27 @@ public class NoteEditActivity extends Activity implements OnClickListener,
                         return false;
                     }
                 } else {
+                    // 情况B：便签不存在 -> 创建一个新的空便签，并把它标记为“通话便签”
                     mWorkingNote = WorkingNote.createEmptyNote(this, folderId, widgetId,
                             widgetType, bgResId);
+                    // 这个方法会把电话号码和时间写入便签的头部信息
                     mWorkingNote.convertToCallNote(phoneNumber, callDate);
                 }
             } else {
+                // --- 3. 普通处理：新建普通便签 ---
+                // 如果没有通话信息，那就是最普通的“新建便签”
                 mWorkingNote = WorkingNote.createEmptyNote(this, folderId, widgetId, widgetType,
                         bgResId);
             }
 
+            // --- 4. 窗口设置 ---
+            // 新建便签时，用户肯定是想打字的，所以：
+            // STATE_VISIBLE: 强制键盘自动弹出来，方便用户直接输入
+            // ADJUST_RESIZE: 键盘弹出时，调整界面大小
             getWindow().setSoftInputMode(
                     WindowManager.LayoutParams.SOFT_INPUT_ADJUST_RESIZE
                             | WindowManager.LayoutParams.SOFT_INPUT_STATE_VISIBLE);
-        } else {
+        }else {
             Log.e(TAG, "Intent not specified action, should not support");
             finish();
             return false;
@@ -382,10 +435,6 @@ public class NoteEditActivity extends Activity implements OnClickListener,
                         | DateUtils.FORMAT_NUMERIC_DATE | DateUtils.FORMAT_SHOW_TIME
                         | DateUtils.FORMAT_SHOW_YEAR));
 
-        /**
-         * TODO: Add the menu for setting alert. Currently disable it because the DateTimePicker
-         * is not ready
-         */
         // 6. 刷新闹钟头部显示
         // 检查是否有闹钟设定，如果有，显示闹钟图标和时间；如果没有，隐藏它们
         showAlertHeader();
@@ -784,19 +833,31 @@ public class NoteEditActivity extends Activity implements OnClickListener,
                 createNewNote();
                 break;
                 
-            case R.id.menu_delete: // 删除便签
-                // 弹出确认删除的对话框
-                AlertDialog.Builder builder = new AlertDialog.Builder(this);
-                builder.setTitle(getString(R.string.alert_title_delete));
-                builder.setIcon(android.R.drawable.ic_dialog_alert);
-                builder.setMessage(getString(R.string.alert_message_delete_note));
+            case R.id.menu_delete: // 用户点击了菜单栏里的“删除”按钮
+                // 1. 建造者模式：创建一个对话框的“构建器”
+                AlertDialog.Builder builder = new AlertDialog.Builder(this);   
+                // 2. 设置对话框的标题（例如：“删除便签”）
+                builder.setTitle(getString(R.string.alert_title_delete));            
+                // 3. 设置对话框的图标（使用系统自带的警告图标 ⚠️）
+                builder.setIcon(android.R.drawable.ic_dialog_alert);             
+                // 4. 设置提示语（例如：“确定要删除这条便签吗？”）
+                builder.setMessage(getString(R.string.alert_message_delete_note));             
+                // 5. 设置“确定”按钮
+                // android.R.string.ok 是系统自带的“确定”文字
                 builder.setPositiveButton(android.R.string.ok, new DialogInterface.OnClickListener() {
                     public void onClick(DialogInterface dialog, int which) {
-                        deleteCurrentNote(); // 执行删除
-                        finish(); // 关闭当前页面
+                        // --- 用户点了“确定”，这里执行真正的删除逻辑 ---
+                        deleteCurrentNote(); // 调用方法，从数据库删除这条便签
+                        finish();            // 删除成功后，关闭当前的编辑页面，返回列表
                     }
                 });
+                
+                // 6. 设置“取消”按钮
+                // android.R.string.cancel 是系统自带的“取消”文字
+                // 第二个参数传 null，表示点击后直接关闭对话框，不执行任何操作
                 builder.setNegativeButton(android.R.string.cancel, null);
+                
+                // 7. 最后一步：把对话框显示出来！
                 builder.show();
                 break;
                 

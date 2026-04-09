@@ -23,28 +23,24 @@ import net.micode.notes.R;
 import net.micode.notes.data.Notes;
 import net.micode.notes.tool.ResourceParser;
 
-/**
- * 4x4尺寸的笔记桌面小部件
- */
-public class NoteWidgetProvider_4x extends NoteWidgetProvider {
 
+public class NoteWidgetProvider_4x extends NoteWidgetProvider {
     @Override
     public void onUpdate(Context context, AppWidgetManager appWidgetManager, int[] appWidgetIds) {
         super.update(context, appWidgetManager, appWidgetIds);
     }
 
-    @Override
     protected int getLayoutId() {
-        return R.layout.widget_4x;  // 4x4布局
+        return R.layout.widget_4x;
     }
 
     @Override
     protected int getBgResourceId(int bgId) {
-        return ResourceParser.WidgetBgResources.getWidget4xBgResource(bgId);  // 获取4x4背景资源
+        return ResourceParser.WidgetBgResources.getWidget4xBgResource(bgId);
     }
 
     @Override
     protected int getWidgetType() {
-        return Notes.TYPE_WIDGET_4X;  // 4x4部件类型标识
+        return Notes.TYPE_WIDGET_4X;
     }
 }

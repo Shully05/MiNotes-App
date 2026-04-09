@@ -22,6 +22,7 @@
 
     <uses-sdk android:minSdkVersion="14" />
 
+<!--    权限声明    如：写入SD卡、主屏幕添加快捷方式、访问网络等-->
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
     <uses-permission android:name="com.android.launcher.permission.INSTALL_SHORTCUT" />
     <uses-permission android:name="android.permission.INTERNET" />
@@ -32,9 +33,12 @@
     <uses-permission android:name="android.permission.USE_CREDENTIALS" />
     <uses-permission android:name="android.permission.RECEIVE_BOOT_COMPLETED" />
 
+<!--    应用主体：定义了应用图标、名称以及所有组件   -->
     <application
         android:icon="@drawable/icon_app"
         android:label="@string/app_name" >
+
+<!--    主界面     -->
         <activity
             android:name=".ui.NotesListActivity"
             android:configChanges="keyboardHidden|orientation|screenSize"
@@ -50,18 +54,19 @@
             </intent-filter>
         </activity>
 
-        <!-- 👇👇👇 添加下面这两行 👇👇👇 -->
+        <!--  添加下面这两行  -->
         <uses-library
             android:name="org.apache.http.legacy"
             android:required="false" />
 
+<!--    编辑界面    -->
         <activity
             android:name=".ui.NoteEditActivity"
             android:configChanges="keyboardHidden|orientation|screenSize"
             android:launchMode="singleTop"
             android:theme="@style/NoteTheme" >
 
-            <intent-filter>
+            <intent-filter android:scheme="http">
                 <action android:name="android.intent.action.VIEW" />
                 <category android:name="android.intent.category.DEFAULT" />
                 <data android:mimeType="vnd.android.cursor.item/text_note" />
@@ -85,11 +90,13 @@
                 android:resource="@xml/searchable" />
         </activity>
 
+<!--    数据提供者   Android四大组件之一，负责管理应用用的数据库，并允许其他应用访问 -->
         <provider
             android:name="net.micode.notes.data.NotesProvider"
             android:authorities="micode_notes"
             android:multiprocess="true" />
 
+<!--    广播接收器  监听系统广播事件   -->
         <receiver
             android:name=".widget.NoteWidgetProvider_2x"
             android:label="@string/app_widget2x2" >
@@ -129,6 +136,7 @@
             android:process=":remote" >
         </receiver>
 
+<!--    闹钟弹窗界面    -->
         <activity
             android:name=".ui.AlarmAlertActivity"
             android:label="@string/app_name"
@@ -136,6 +144,7 @@
             android:theme="@android:style/Theme.Holo.Wallpaper.NoTitleBar" >
         </activity>
 
+<!--    设置界面    -->
         <activity
             android:name="net.micode.notes.ui.NotesPreferenceActivity"
             android:label="@string/preferences_title"
@@ -143,13 +152,41 @@
             android:theme="@android:style/Theme.Holo.Light" >
         </activity>
 
+<!--    服务    后台服务，与Google Tasks进行同步    -->
         <service
             android:name="net.micode.notes.gtask.remote.GTaskSyncService"
             android:exported="false" >
         </service>
 
+<!--    默认搜索配置    -->
         <meta-data
             android:name="android.app.default_searchable"
             android:value=".ui.NoteEditActivity" />
     </application>
 </manifest>
+
+
+<!-- 
+总结：
+    数据层：通过 NotesProvider 管理 SQLite 数据库。
+    界面层：包含列表、编辑、设置、闹钟弹窗等多个 Activity。
+    后台层：包含同步服务（SyncService）和闹钟管理（AlarmReceiver）。
+    扩展性：支持桌面小部件（Widget）和全局搜索。
+
+    共四个界面组件（Activity）：
+    1. NotesListActivity：主界面，显示笔记列表。
+    2. NoteEditActivity：编辑界面，处理笔记的创建和修改。
+    3. AlarmAlertActivity：闹钟弹窗界面，提醒用户。
+    4. NotesPreferenceActivity：设置界面，允许用户配置应用选项。
+    一个数据提供者（Provider）：
+    NotesProvider：管理笔记数据的存储和访问。
+    四个广播接收器（Receiver）：
+    1. NoteWidgetProvider_2x 和 NoteWidgetProvider_4x：管理桌面小部件的更新和删除。
+    2. AlarmInitReceiver：监听系统启动完成事件，初始化闹钟设置。
+    3. AlarmReceiver：处理闹钟触发事件。
+    一个服务（Service）：
+    GTaskSyncService：负责与 Google Tasks 进行数据同步。
+
+    项目的入口是 NotesListActivity。整个应用的核心交互逻辑围绕着‘列表展示’和‘单条编辑’两个页面展开，
+    同时通过 AlarmAlertActivity 实现了全屏闹钟提醒功能，架构非常清晰。
+ -->

@@ -60,36 +60,37 @@ import java.util.zip.GZIPInputStream;
 import java.util.zip.Inflater;
 import java.util.zip.InflaterInputStream;
 
-
+//一个访问谷歌任务服务的客户端，它被设计为单例模式，并且这个类中的所有方法都是阻塞的，所以请在工作线程中调用它们。
 public class GTaskClient {
-    private static final String TAG = GTaskClient.class.getSimpleName();
+    private static final String TAG = GTaskClient.class.getSimpleName();// "GTaskClient"类的简单名称
 
-    private static final String GTASK_URL = "https://mail.google.com/tasks/";
+    private static final String GTASK_URL = "https://mail.google.com/tasks/";   // 这个URL是谷歌任务服务的基本URL，后续会根据账户类型进行调整
 
-    private static final String GTASK_GET_URL = "https://mail.google.com/tasks/ig";
+    private static final String GTASK_GET_URL = "https://mail.google.com/tasks/ig"; // 这个URL用于获取任务列表和任务详情等信息，后续会根据账户类型进行调整
 
-    private static final String GTASK_POST_URL = "https://mail.google.com/tasks/r/ig";
+    private static final String GTASK_POST_URL = "https://mail.google.com/tasks/r/ig";  // 这个URL用于提交任务的创建、更新、删除等操作，后续会根据账户类型进行调整
 
-    private static GTaskClient mInstance = null;
+    private static GTaskClient mInstance = null;    // GTaskClient的单例实例
 
-    private DefaultHttpClient mHttpClient;
+    private DefaultHttpClient mHttpClient;  // 用于执行HTTP请求的客户端对象
 
-    private String mGetUrl;
+    private String mGetUrl; // 用于获取任务列表和任务详情等信息的URL，初始值为GTASK_GET_URL，后续会根据账户类型进行调整
 
-    private String mPostUrl;
+    private String mPostUrl;    // 用于提交任务的创建、更新、删除等操作的URL，初始值为GTASK_POST_URL，后续会根据账户类型进行调整
 
-    private long mClientVersion;
+    private long mClientVersion;    // 用于标识客户端版本的变量，初始值为-1，登录成功后会从服务器获取实际的版本号
 
-    private boolean mLoggedin;
+    private boolean mLoggedin;  // 标识是否已经登录成功的变量，初始值为false，登录成功后会设置为true
 
-    private long mLastLoginTime;
+    private long mLastLoginTime;    // 记录上次登录时间的变量，初始值为0，每次登录成功后会更新为当前时间，用于判断是否需要重新登录
 
-    private int mActionId;
+    private int mActionId;  // 用于生成唯一的操作ID的变量，初始值为1，每次生成一个新的操作ID后会自增1
 
-    private Account mAccount;
+    private Account mAccount;   // 记录当前使用的Google账户的变量，初始值为null，登录成功后会设置为对应的Account对象
 
-    private JSONArray mUpdateArray;
+    private JSONArray mUpdateArray; // 用于批量提交更新操作的JSONArray对象，初始值为null，每次添加一个更新操作后会将对应的JSON对象添加到这个数组中，当数组中的操作数量超过一定阈值时会自动提交一次更新请求
 
+    // 私有构造函数，初始化成员变量,并且设置默认的URL和登录状态等信息
     private GTaskClient() {
         mHttpClient = null;
         mGetUrl = GTASK_GET_URL;
@@ -102,6 +103,7 @@ public class GTaskClient {
         mUpdateArray = null;
     }
 
+    // 获取GTaskClient的单例实例，如果实例不存在则创建一个新的实例并返回，否则直接返回现有的实例
     public static synchronized GTaskClient getInstance() {
         if (mInstance == null) {
             mInstance = new GTaskClient();
@@ -109,15 +111,17 @@ public class GTaskClient {
         return mInstance;
     }
 
+    // 登录谷歌账户并获取访问谷歌任务服务所需的认证信息，如果已经登录且认证信息未过期则直接返回true，否则重新登录并获取认证信息，登录成功后会更新登录状态和相关变量，并返回true，如果登录失败则返回false
     public boolean login(Activity activity) {
         // we suppose that the cookie would expire after 5 minutes
         // then we need to re-login
         final long interval = 1000 * 60 * 5;
+        // 检查cookie是否过期，如果过期，则将登录状态设置为false并重新登录，否则直接返回true。
         if (mLastLoginTime + interval < System.currentTimeMillis()) {
             mLoggedin = false;
         }
 
-        // need to re-login after account switch
+        //账户切换后需要重新登录
         if (mLoggedin
                 && !TextUtils.equals(getSyncAccount().name, NotesPreferenceActivity
                         .getSyncAccountName(activity))) {
@@ -164,6 +168,7 @@ public class GTaskClient {
         return true;
     }
 
+    // 登录谷歌账户并获取认证信息的具体实现方法，首先获取设备上所有的Google账户，并根据设置中保存的账户名称找到对应的Account对象，如果找不到则返回null；然后使用AccountManager获取该账户的认证Token，如果获取失败则返回null；如果获取成功但需要重新验证Token，则调用invalidateAuthToken方法使当前Token失效，并再次调用loginGoogleAccount方法获取新的Token；最后返回获取到的认证Token字符串。
     private String loginGoogleAccount(Activity activity, boolean invalidateToken) {
         String authToken;
         AccountManager accountManager = AccountManager.get(activity);
@@ -207,6 +212,7 @@ public class GTaskClient {
         return authToken;
     }
 
+    // 尝试使用提供的认证Token登录谷歌任务服务，如果登录失败则可能是Token过期了，这时会使当前Token失效并重新获取一个新的Token，然后再次尝试登录，如果登录成功则返回true，否则返回false。
     private boolean tryToLoginGtask(Activity activity, String authToken) {
         if (!loginGtask(authToken)) {
             // maybe the auth token is out of date, now let's invalidate the
@@ -225,6 +231,7 @@ public class GTaskClient {
         return true;
     }
 
+    // 使用提供的认证Token登录谷歌任务服务的具体实现方法，首先设置HTTP连接和Socket的超时时间，并创建一个新的DefaultHttpClient对象；然后使用HttpGet请求登录URL，并获取响应；接着从响应中获取Cookie，检查是否包含认证Cookie；最后从响应内容中提取客户端版本号并保存到mClientVersion变量中，如果过程中发生任何异常则返回false，否则返回true。
     private boolean loginGtask(String authToken) {
         int timeoutConnection = 10000;
         int timeoutSocket = 15000;
@@ -280,10 +287,12 @@ public class GTaskClient {
         return true;
     }
 
+    // 生成一个新的操作ID，并将mActionId变量自增1，以确保每次调用这个方法都会返回一个唯一的操作ID。
     private int getActionId() {
         return mActionId++;
     }
 
+    // 创建一个新的HttpPost对象，并设置请求的URL和必要的请求头信息，返回这个HttpPost对象以供后续使用。
     private HttpPost createHttpPost() {
         HttpPost httpPost = new HttpPost(mPostUrl);
         httpPost.setHeader("Content-Type", "application/x-www-form-urlencoded;charset=utf-8");
@@ -291,6 +300,7 @@ public class GTaskClient {
         return httpPost;
     }
 
+    // 从HTTP响应的实体中读取内容，并根据Content-Encoding头信息进行相应的解压缩处理，最后将解压后的内容转换为字符串并返回，如果过程中发生任何异常则抛出IOException。
     private String getResponseContent(HttpEntity entity) throws IOException {
         String contentEncoding = null;
         if (entity.getContentEncoding() != null) {
@@ -323,6 +333,7 @@ public class GTaskClient {
         }
     }
 
+    // 发送POST请求并返回响应的JSON对象，首先检查是否已经登录，如果没有登录则抛出ActionFailureException异常；然后创建一个HttpPost对象，并将提供的JSON对象作为请求的参数进行编码；接着执行POST请求并获取响应；最后从响应中读取内容并转换为JSON对象返回，如果过程中发生任何异常则根据异常类型抛出相应的NetworkFailureException或ActionFailureException异常。
     private JSONObject postRequest(JSONObject js) throws NetworkFailureException {
         if (!mLoggedin) {
             Log.e(TAG, "please login first");
@@ -360,6 +371,9 @@ public class GTaskClient {
         }
     }
 
+    // 创建一个新的任务，首先调用commitUpdate方法提交之前积累的更新操作；
+    // 然后构建一个包含创建任务操作的JSON对象，并将其作为参数调用postRequest方法发送POST请求；
+    // 最后从响应中提取新创建任务的ID并设置到Task对象中，如果过程中发生任何异常则抛出相应的ActionFailureException异常。
     public void createTask(Task task) throws NetworkFailureException {
         commitUpdate();
         try {
@@ -386,6 +400,9 @@ public class GTaskClient {
         }
     }
 
+    // 创建一个新的任务列表，首先调用commitUpdate方法提交之前积累的更新操作；
+    // 然后构建一个包含创建任务列表操作的JSON对象，并将其作为参数调用postRequest方法发送POST请求；
+    // 最后从响应中提取新创建任务列表的ID并设置到TaskList对象中，如果过程中发生任何异常则抛出相应的ActionFailureException异常。
     public void createTaskList(TaskList tasklist) throws NetworkFailureException {
         commitUpdate();
         try {
@@ -412,6 +429,8 @@ public class GTaskClient {
         }
     }
 
+    // 提交之前积累的更新操作，如果mUpdateArray不为null，则构建一个包含这些更新操作的JSON对象，并将其作为参数调用postRequest方法发送POST请求；
+    // 最后将mUpdateArray设置为null以清空积累的更新操作，如果过程中发生任何异常则抛出相应的ActionFailureException异常。
     public void commitUpdate() throws NetworkFailureException {
         if (mUpdateArray != null) {
             try {
@@ -433,6 +452,9 @@ public class GTaskClient {
         }
     }
 
+    // 添加一个更新操作到mUpdateArray中，
+    // 如果mUpdateArray中的操作数量超过10个，则先调用commitUpdate方法提交之前积累的更新操作，
+    // 然后再将新的更新操作添加到mUpdateArray中，以避免一次提交过多的更新操作导致请求失败。
     public void addUpdateNode(Node node) throws NetworkFailureException {
         if (node != null) {
             // too many update items may result in an error
@@ -447,6 +469,9 @@ public class GTaskClient {
         }
     }
 
+    // 移动一个任务到新的父任务或新的任务列表中，首先调用commitUpdate方法提交之前积累的更新操作；
+    // 然后构建一个包含移动任务操作的JSON对象，并将其作为参数调用postRequest方法发送POST请求；
+    // 最后如果过程中发生任何异常则抛出相应的ActionFailureException异常。
     public void moveTask(Task task, TaskList preParent, TaskList curParent)
             throws NetworkFailureException {
         commitUpdate();
@@ -486,6 +511,9 @@ public class GTaskClient {
         }
     }
 
+    // 删除一个任务或任务列表，首先调用commitUpdate方法提交之前积累的更新操作；
+    // 然后构建一个包含删除操作的JSON对象，并将其作为参数调用postRequest方法发送POST请求；
+    // 最后将mUpdateArray设置为null以清空积累的更新操作，如果过程中发生任何异常则抛出相应的ActionFailureException异常。
     public void deleteNode(Node node) throws NetworkFailureException {
         commitUpdate();
         try {
@@ -509,6 +537,10 @@ public class GTaskClient {
         }
     }
 
+    // 获取所有的任务列表，首先检查是否已经登录，如果没有登录则抛出ActionFailureException异常；
+    // 然后使用HttpGet请求获取任务列表的URL，并获取响应；
+    // 接着从响应内容中提取包含任务列表信息的JSON字符串，并将其转换为JSONObject对象；
+    // 最后从JSONObject对象中提取任务列表的JSONArray并返回，如果过程中发生任何异常则根据异常类型抛出相应的NetworkFailureException或ActionFailureException异常。
     public JSONArray getTaskLists() throws NetworkFailureException {
         if (!mLoggedin) {
             Log.e(TAG, "please login first");
@@ -547,6 +579,9 @@ public class GTaskClient {
         }
     }
 
+    // 获取指定任务列表中的所有任务，首先调用commitUpdate方法提交之前积累的更新操作；
+    // 然后构建一个包含获取任务列表操作的JSON对象，并将其作为参数调用postRequest方法发送POST请求；
+    // 最后从响应中提取任务列表的JSONArray并返回，如果过程中发生任何异常则根据异常类型抛出相应的NetworkFailureException或ActionFailureException异常。
     public JSONArray getTaskList(String listGid) throws NetworkFailureException {
         commitUpdate();
         try {
@@ -575,10 +610,12 @@ public class GTaskClient {
         }
     }
 
+    // 获取当前使用的Google账户的Account对象，如果没有登录则返回null，否则返回对应的Account对象。
     public Account getSyncAccount() {
         return mAccount;
     }
 
+    // 获取当前客户端版本号，如果没有登录则返回-1，否则返回从服务器获取到的实际版本号。
     public void resetUpdateArray() {
         mUpdateArray = null;
     }

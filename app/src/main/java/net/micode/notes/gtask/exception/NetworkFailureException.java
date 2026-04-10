@@ -16,40 +16,17 @@
 
 package net.micode.notes.gtask.exception;
 
-/**
- * 自定义受检异常类，用于表示网络通信过程中发生的故障
- * 继承自Exception，说明这是受检异常，调用方必须进行捕获或声明抛出
- * 常见触发场景：网络连接超时、服务端无响应、SSL握手失败等网络相关问题
- */
 public class NetworkFailureException extends Exception {
-    // 序列化版本号，保证不同版本类的序列化兼容性
-    // 当类结构变化时需校验此版本号，避免反序列化失败
     private static final long serialVersionUID = 2107610287180234136L;
 
-    /**
-    * 空参构造器，创建无详细错误信息的异常对象
-    * 适用于快速抛出但不需要额外描述的场景
-    */
     public NetworkFailureException() {
         super();
     }
 
-    /**
-    * 创建包含错误描述的异常对象
-    * 
-    * @param paramString 自定义错误信息，用于说明具体的网络故障类型
-    *                    示例："连接超时，请检查网络"、"服务端返回500错误"
-    */    
     public NetworkFailureException(String paramString) {
         super(paramString);
     }
-    /**
-    * 创建包含错误描述和原始异常的异常对象
-    * 
-    * @param paramString 自定义错误信息，用于说明具体的网络故障类型
-    * @param paramThrowable 原始异常对象，提供导致当前网络故障的底层原因
-    *                       例如：IOException、SocketTimeoutException等
-    */
+
     public NetworkFailureException(String paramString, Throwable paramThrowable) {
         super(paramString, paramThrowable);
     }

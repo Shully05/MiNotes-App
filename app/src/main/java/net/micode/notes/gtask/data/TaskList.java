@@ -30,6 +30,9 @@ import org.json.JSONObject;
 import java.util.ArrayList;
 
 
+// TaskList代表gtask中的一个任务列表，它包含一个任务列表。它可以生成用于创建/更新操作的JSON对象，
+// 也可以通过解析来自远程或本地数据库的JSON对象来设置其内容。它还可以与本地数据库记录进行比较以生成同步操作。
+// 同步操作可以是SYNC_ACTION_NONE、SYNC_ACTION_UPDATE_LOCAL、SYNC_ACTION_UPDATE_REMOTE、SYNC_ACTION_ERROR。
 public class TaskList extends Node {
     private static final String TAG = TaskList.class.getSimpleName();
 
@@ -43,6 +46,7 @@ public class TaskList extends Node {
         mIndex = 1;
     }
 
+    // 生成一个用于创建操作的JSON对象，包含操作类型、操作ID、索引和实体增量（名称、创建者ID、实体类型）。
     public JSONObject getCreateAction(int actionId) {
         JSONObject js = new JSONObject();
 
@@ -74,6 +78,7 @@ public class TaskList extends Node {
         return js;
     }
 
+    // 生成一个用于更新操作的JSON对象，包含操作类型、操作ID、ID和实体增量（名称、删除状态）。
     public JSONObject getUpdateAction(int actionId) {
         JSONObject js = new JSONObject();
 
@@ -103,6 +108,7 @@ public class TaskList extends Node {
         return js;
     }
 
+    // 通过解析来自远程的JSON对象来设置内容，包含ID、最后修改时间和名称。
     public void setContentByRemoteJSON(JSONObject js) {
         if (js != null) {
             try {
@@ -129,6 +135,7 @@ public class TaskList extends Node {
         }
     }
 
+    // 通过解析来自本地数据库的JSON对象来设置内容，包含名称和类型。根据类型设置名称，如果是系统文件夹还需要根据ID设置名称。
     public void setContentByLocalJSON(JSONObject js) {
         if (js == null || !js.has(GTaskStringUtils.META_HEAD_NOTE)) {
             Log.w(TAG, "setContentByLocalJSON: nothing is avaiable");
@@ -157,6 +164,7 @@ public class TaskList extends Node {
         }
     }
 
+    // 生成一个用于本地数据库的JSON对象，包含名称和类型。根据名称设置类型，如果是系统文件夹还需要去掉前缀。
     public JSONObject getLocalJSONFromContent() {
         try {
             JSONObject js = new JSONObject();
@@ -183,6 +191,7 @@ public class TaskList extends Node {
         }
     }
 
+    // 与本地数据库记录进行比较以生成同步操作。根据本地修改标志和同步ID与最后修改时间的比较，判断是没有操作、更新本地、更新远程还是发生错误。
     public int getSyncAction(Cursor c) {
         try {
             if (c.getInt(SqlNote.LOCAL_MODIFIED_COLUMN) == 0) {
@@ -216,10 +225,12 @@ public class TaskList extends Node {
         return SYNC_ACTION_ERROR;
     }
 
+    // 获取子任务的数量。
     public int getChildTaskCount() {
         return mChildren.size();
     }
 
+    // 添加一个子任务，如果任务不为null且不在子任务列表中，则将其添加到子任务列表中，并设置其前一个兄弟节点和父节点。
     public boolean addChildTask(Task task) {
         boolean ret = false;
         if (task != null && !mChildren.contains(task)) {
@@ -234,6 +245,7 @@ public class TaskList extends Node {
         return ret;
     }
 
+    // 添加一个子任务到指定位置，如果索引有效且任务不为null且不在子任务列表中，则将其添加到子任务列表中，并更新其前一个兄弟节点和后一个兄弟节点。
     public boolean addChildTask(Task task, int index) {
         if (index < 0 || index > mChildren.size()) {
             Log.e(TAG, "add child task: invalid index");
@@ -260,6 +272,7 @@ public class TaskList extends Node {
         return true;
     }
 
+    // 移除一个子任务，如果任务在子任务列表中，则将其从子任务列表中移除，并重置其前一个兄弟节点和父节点，同时更新后一个兄弟节点的前一个兄弟节点。
     public boolean removeChildTask(Task task) {
         boolean ret = false;
         int index = mChildren.indexOf(task);
@@ -281,6 +294,7 @@ public class TaskList extends Node {
         return ret;
     }
 
+    // 移动一个子任务到指定位置，如果索引有效且任务在子任务列表中，则将其从原位置移除并添加到新位置。
     public boolean moveChildTask(Task task, int index) {
 
         if (index < 0 || index >= mChildren.size()) {
@@ -299,6 +313,7 @@ public class TaskList extends Node {
         return (removeChildTask(task) && addChildTask(task, index));
     }
 
+    // 根据GID查找一个子任务，如果在子任务列表中找到一个任务的GID与给定的GID相同，则返回该任务，否则返回null。
     public Task findChildTaskByGid(String gid) {
         for (int i = 0; i < mChildren.size(); i++) {
             Task t = mChildren.get(i);
@@ -309,10 +324,12 @@ public class TaskList extends Node {
         return null;
     }
 
+    // 获取一个子任务的索引，如果在子任务列表中找到该任务，则返回其索引，否则返回-1。
     public int getChildTaskIndex(Task task) {
         return mChildren.indexOf(task);
     }
 
+    // 根据索引获取一个子任务，如果索引有效，则返回子任务列表中该索引位置的任务，否则返回null。
     public Task getChildTaskByIndex(int index) {
         if (index < 0 || index >= mChildren.size()) {
             Log.e(TAG, "getTaskByIndex: invalid index");
@@ -321,6 +338,7 @@ public class TaskList extends Node {
         return mChildren.get(index);
     }
 
+    // 根据GID获取一个子任务，如果在子任务列表中找到一个任务的GID与给定的GID相同，则返回该任务，否则返回null。
     public Task getChilTaskByGid(String gid) {
         for (Task task : mChildren) {
             if (task.getGid().equals(gid))
@@ -329,14 +347,17 @@ public class TaskList extends Node {
         return null;
     }
 
+    // 获取子任务列表。
     public ArrayList<Task> getChildTaskList() {
         return this.mChildren;
     }
 
+    // 设置索引，如果索引有效，则将其设置为成员变量mIndex。
     public void setIndex(int index) {
         this.mIndex = index;
     }
 
+    // 获取索引，返回成员变量mIndex的值。
     public int getIndex() {
         return this.mIndex;
     }

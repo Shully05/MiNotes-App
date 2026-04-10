@@ -52,7 +52,7 @@ import java.io.IOException;
 // 它本质上是一个系统页面 (extends Activity)，
 // 并且它承诺能处理点击事件 (implements OnClickListener)，
 // 还能处理对话框消失的事件 (implements OnDismissListener)。
-public class AlarmAlertActivity extends Activity implements OnClickListener, OnDismissImpl {
+public class AlarmAlertActivity extends Activity implements OnClickListener, OnDismissListener {
 
     private long mNoteId;      // 当前闹钟关联的便签ID
     private String mSnippet;   // 便签的摘要内容（显示在弹窗里）
@@ -86,7 +86,6 @@ public class AlarmAlertActivity extends Activity implements OnClickListener, OnD
         try {
             // 例如 Uri 是 content://notes/123，getPathSegments().get(1) 取出 "123"
             mNoteId = Long.valueOf(intent.getData().getPathSegments().get(1));
-            intent.getData()：获取整个地址对象。
             //.getPathSegments()：把地址按斜杠 / 切开，变成一个列表：
 
             // 👈 使用 DataUtils 工具类：根据 ID 从数据库读取便签内容片段

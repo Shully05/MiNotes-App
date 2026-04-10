@@ -22,6 +22,7 @@ import android.app.AlertDialog; // 弹窗对话框，用于显示提示信息或
 import android.app.PendingIntent; // 延迟意图，通常配合 AlarmManager 或通知栏使用，用于在未来某个时间点触发动作
 import android.app.SearchManager; // 系统搜索管理服务，用于处理全局搜索功能
 import android.appwidget.AppWidgetManager; // 桌面小部件管理器，用于更新和管理桌面便签挂件
+import android.content.ContentUris;// 内容 URI 工具类，用于构建访问数据库的 URI（如便签的 ID）
 import android.content.Context; // 上下文环境，获取系统资源和服务的基础
 import android.content.DialogInterface; // 对话框接口，用于处理对话框按钮点击事件
 import android.content.Intent; // 意图，用于在组件（Activity, Service, Receiver）之间传递消息和跳转
@@ -561,10 +562,10 @@ public class NoteEditActivity extends Activity implements OnClickListener,
      */
     private boolean inRangeOfView(View view, MotionEvent ev) {
         // 获取 View 在屏幕上的绝对坐标 (x, y)
-        int []location = new int;
+        int []location = new int[2];
         view.getLocationOnScreen(location);
-        int x = location; // 左上角 X 坐标
-        int y = location; // 左上角 Y 坐标
+        int x = location[0]; // 左上角 X 坐标
+        int y = location[1]; // 左上角 Y 坐标
         
         // 判断触摸点 (ev.getX(), ev.getY()) 是否超出了 View 的矩形区域
         // 注意：这里使用的是屏幕坐标，因为 getLocationOnScreen 返回的是屏幕坐标
@@ -575,7 +576,7 @@ public class NoteEditActivity extends Activity implements OnClickListener,
                     return false; // 超出范围，返回 false
                 }
         return true; // 在范围内
-    }<websource>source_group_web_1</websource>
+    }
 
     /**
      * 核心方法：初始化界面资源与绑定事件

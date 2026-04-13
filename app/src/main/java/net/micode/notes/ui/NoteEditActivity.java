@@ -189,12 +189,16 @@ public class NoteEditActivity extends Activity implements OnClickListener,
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+        setTheme(android.R.style.Theme_Holo_Light_DarkActionBar);// 设置主题，使用带有暗色 ActionBar 的 Holo Light 主题，显示菜单键
         super.onCreate(savedInstanceState);
     /* 
        设置界面布局: 加载 res/layout/note_edit.xml
        这是一个包含标题栏和编辑框的复杂布局。
     */
         this.setContentView(R.layout.note_edit);
+
+        // 强制显示溢出菜单（那三个点）
+        getWindow().getDecorView().setSystemUiVisibility(0);
 
     /* 
        状态恢复逻辑:
@@ -889,12 +893,43 @@ public class NoteEditActivity extends Activity implements OnClickListener,
             case R.id.menu_delete_remind: // 删除闹钟
                 mWorkingNote.setAlertDate(0, false); // 将闹钟时间设为0，取消提醒
                 break;
+
+            case R.id.menu_copy:    //一键复制
+                copyNoteContent();  // 调用新方法，复制内容到剪贴板
+                break;
                 
             default:
                 break;
         }
         return true;
     }
+
+        /**
+         * 新增的方法：复制内容到剪贴板
+         */
+        private void copyNoteContent() {
+            // 1. 获取编辑框中的文本
+            // 小米便签中，编辑内容的控件通常叫 mNoteEditor 或类似名字
+            // 如果你不确定变量名，可以查看类定义的顶部
+            String content = mNoteEditor.getText().toString();
+
+            if (content == null || content.length() == 0) {
+                Toast.makeText(this, "便签内容为空，无法复制", Toast.LENGTH_SHORT).show();
+                return;
+            }
+
+            // 2. 获取系统剪贴板服务
+            android.content.ClipboardManager clipboard = (android.content.ClipboardManager) getSystemService(Context.CLIPBOARD_SERVICE);
+
+            // 3. 创建剪贴板数据
+            android.content.ClipData clip = android.content.ClipData.newPlainText("NoteContent", content);
+
+            // 4. 设置数据到剪贴板
+            if (clipboard != null) {
+                clipboard.setPrimaryClip(clip);
+                Toast.makeText(this, "内容已复制到剪贴板", Toast.LENGTH_SHORT).show();
+            }
+        }
 
     /**
      * 核心方法：打开时间选择器以设置提醒

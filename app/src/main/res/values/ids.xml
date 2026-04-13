@@ -1,0 +1,5 @@
+<!-- res/values/ids.xml -->
+<resources>
+    <!-- 其他已有的 ID ... -->
+    <item name="menu_copy" type="id"/>
+</resources>

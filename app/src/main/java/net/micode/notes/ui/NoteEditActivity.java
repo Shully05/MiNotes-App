@@ -22,6 +22,7 @@ import android.app.AlertDialog; // 弹窗对话框，用于显示提示信息或
 import android.app.PendingIntent; // 延迟意图，通常配合 AlarmManager 或通知栏使用，用于在未来某个时间点触发动作
 import android.app.SearchManager; // 系统搜索管理服务，用于处理全局搜索功能
 import android.appwidget.AppWidgetManager; // 桌面小部件管理器，用于更新和管理桌面便签挂件
+import android.content.ContentUris;// 内容 URI 工具类，用于构建访问数据库的 URI（如便签的 ID）
 import android.content.Context; // 上下文环境，获取系统资源和服务的基础
 import android.content.DialogInterface; // 对话框接口，用于处理对话框按钮点击事件
 import android.content.Intent; // 意图，用于在组件（Activity, Service, Receiver）之间传递消息和跳转
@@ -188,12 +189,16 @@ public class NoteEditActivity extends Activity implements OnClickListener,
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+        setTheme(android.R.style.Theme_Holo_Light_DarkActionBar);// 设置主题，使用带有暗色 ActionBar 的 Holo Light 主题，显示菜单键
         super.onCreate(savedInstanceState);
     /* 
        设置界面布局: 加载 res/layout/note_edit.xml
        这是一个包含标题栏和编辑框的复杂布局。
     */
         this.setContentView(R.layout.note_edit);
+
+        // 强制显示溢出菜单（那三个点）
+        getWindow().getDecorView().setSystemUiVisibility(0);
 
     /* 
        状态恢复逻辑:
@@ -561,10 +566,10 @@ public class NoteEditActivity extends Activity implements OnClickListener,
      */
     private boolean inRangeOfView(View view, MotionEvent ev) {
         // 获取 View 在屏幕上的绝对坐标 (x, y)
-        int []location = new int;
+        int []location = new int[2];
         view.getLocationOnScreen(location);
-        int x = location; // 左上角 X 坐标
-        int y = location; // 左上角 Y 坐标
+        int x = location[0]; // 左上角 X 坐标
+        int y = location[1]; // 左上角 Y 坐标
         
         // 判断触摸点 (ev.getX(), ev.getY()) 是否超出了 View 的矩形区域
         // 注意：这里使用的是屏幕坐标，因为 getLocationOnScreen 返回的是屏幕坐标
@@ -575,7 +580,7 @@ public class NoteEditActivity extends Activity implements OnClickListener,
                     return false; // 超出范围，返回 false
                 }
         return true; // 在范围内
-    }<websource>source_group_web_1</websource>
+    }
 
     /**
      * 核心方法：初始化界面资源与绑定事件
@@ -888,12 +893,43 @@ public class NoteEditActivity extends Activity implements OnClickListener,
             case R.id.menu_delete_remind: // 删除闹钟
                 mWorkingNote.setAlertDate(0, false); // 将闹钟时间设为0，取消提醒
                 break;
+
+            case R.id.menu_copy:    //一键复制
+                copyNoteContent();  // 调用新方法，复制内容到剪贴板
+                break;
                 
             default:
                 break;
         }
         return true;
     }
+
+        /**
+         * 新增的方法：复制内容到剪贴板
+         */
+        private void copyNoteContent() {
+            // 1. 获取编辑框中的文本
+            // 小米便签中，编辑内容的控件通常叫 mNoteEditor 或类似名字
+            // 如果你不确定变量名，可以查看类定义的顶部
+            String content = mNoteEditor.getText().toString();
+
+            if (content == null || content.length() == 0) {
+                Toast.makeText(this, "便签内容为空，无法复制", Toast.LENGTH_SHORT).show();
+                return;
+            }
+
+            // 2. 获取系统剪贴板服务
+            android.content.ClipboardManager clipboard = (android.content.ClipboardManager) getSystemService(Context.CLIPBOARD_SERVICE);
+
+            // 3. 创建剪贴板数据
+            android.content.ClipData clip = android.content.ClipData.newPlainText("NoteContent", content);
+
+            // 4. 设置数据到剪贴板
+            if (clipboard != null) {
+                clipboard.setPrimaryClip(clip);
+                Toast.makeText(this, "内容已复制到剪贴板", Toast.LENGTH_SHORT).show();
+            }
+        }
 
     /**
      * 核心方法：打开时间选择器以设置提醒

@@ -32,19 +32,22 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 
+/// 任务对象，包含了任务的基本属性和相关操作方法
 public class Task extends Node {
-    private static final String TAG = Task.class.getSimpleName();
 
-    private boolean mCompleted;
+    private static final String TAG = Task.class.getSimpleName();    // 日志标签，用于标识日志输出的来源类
 
-    private String mNotes;
+    private boolean mCompleted; // 任务是否已完成的标志，默认为false，表示任务未完成
 
-    private JSONObject mMetaInfo;
+    private String mNotes;  // 任务的备注信息，默认为null，表示没有备注内容
 
-    private Task mPriorSibling;
+    private JSONObject mMetaInfo;   // 任务的元数据信息，使用JSONObject对象存储，默认为null，表示没有元数据信息
 
-    private TaskList mParent;
+    private Task mPriorSibling; // 任务的前一个兄弟节点，默认为null，表示没有前一个兄弟节点
 
+    private TaskList mParent;   // 任务所属的父节点，类型为TaskList，默认为null，表示没有父节点
+
+    // 构造方法，初始化任务对象的属性，设置默认值
     public Task() {
         super();
         mCompleted = false;
@@ -54,6 +57,7 @@ public class Task extends Node {
         mMetaInfo = null;
     }
 
+    // 获取任务的创建操作的JSON对象，包含了创建操作所需的相关信息，如操作类型、操作ID、任务属性等
     public JSONObject getCreateAction(int actionId) {
         JSONObject js = new JSONObject();
 
@@ -103,6 +107,7 @@ public class Task extends Node {
         return js;
     }
 
+    // 获取任务的更新操作的JSON对象，包含了更新操作所需的相关信息，如操作类型、操作ID、任务属性等
     public JSONObject getUpdateAction(int actionId) {
         JSONObject js = new JSONObject();
 
@@ -135,6 +140,7 @@ public class Task extends Node {
         return js;
     }
 
+    // 获取任务的删除操作的JSON对象，包含了删除操作所需的相关信息，如操作类型、操作ID、任务属性等
     public void setContentByRemoteJSON(JSONObject js) {
         if (js != null) {
             try {
@@ -175,6 +181,7 @@ public class Task extends Node {
         }
     }
 
+    // 根据本地存储的JSON对象设置任务的内容属性，包括任务的名称、备注等信息，确保任务对象的内容与本地存储的数据保持一致
     public void setContentByLocalJSON(JSONObject js) {
         if (js == null || !js.has(GTaskStringUtils.META_HEAD_NOTE)
                 || !js.has(GTaskStringUtils.META_HEAD_DATA)) {
@@ -204,6 +211,7 @@ public class Task extends Node {
         }
     }
 
+    // 获取任务的内容属性的JSON对象，包含了任务的名称、备注等信息，以便将任务的内容保存到本地存储中，确保任务对象的内容能够正确地持久化和恢复
     public JSONObject getLocalJSONFromContent() {
         String name = getName();
         try {
@@ -247,6 +255,7 @@ public class Task extends Node {
         }
     }
 
+    // 设置任务的元数据信息，元数据信息包含了任务的相关属性和数据，以JSON格式存储，确保任务对象能够正确地维护和使用元数据信息来支持任务的各种操作和功能
     public void setMetaInfo(MetaData metaData) {
         if (metaData != null && metaData.getNotes() != null) {
             try {
@@ -258,6 +267,7 @@ public class Task extends Node {
         }
     }
 
+    // 获取任务的同步操作类型，根据本地存储的数据和远程数据的状态，判断需要执行的同步操作类型，如更新本地数据、更新远程数据、冲突解决等，以确保任务对象能够正确地进行数据同步和冲突处理
     public int getSyncAction(Cursor c) {
         try {
             JSONObject noteInfo = null;
@@ -311,39 +321,48 @@ public class Task extends Node {
         return SYNC_ACTION_ERROR;
     }
 
+    // 判断任务是否值得保存，如果任务的元数据信息不为null，或者任务的名称和备注信息不为空，则认为任务是值得保存的，以避免保存无效或空白的任务对象
     public boolean isWorthSaving() {
         return mMetaInfo != null || (getName() != null && getName().trim().length() > 0)
                 || (getNotes() != null && getNotes().trim().length() > 0);
     }
 
+    // 设置任务的完成状态，参数completed表示任务是否已完成，设置完成状态可以用于标识任务的进度和状态，以便在任务列表中显示和管理任务对象
     public void setCompleted(boolean completed) {
         this.mCompleted = completed;
     }
 
+    // 设置任务的备注信息，参数notes表示任务的备注内容，设置备注信息可以用于提供任务的额外说明和细节，以便在任务列表中显示和管理任务对象
     public void setNotes(String notes) {
         this.mNotes = notes;
     }
 
+    // 设置任务的前一个兄弟节点，参数priorSibling表示任务的前一个兄弟节点对象，设置前一个兄弟节点可以用于维护任务之间的层级关系和顺序，以便在任务列表中正确地显示和管理任务对象
     public void setPriorSibling(Task priorSibling) {
         this.mPriorSibling = priorSibling;
     }
 
+    // 设置任务所属的父节点，参数parent表示任务所属的父节点对象，设置父节点可以用于维护任务之间的层级关系和组织结构，以便在任务列表中正确地显示和管理任务对象
     public void setParent(TaskList parent) {
         this.mParent = parent;
     }
 
+    //  获取任务的完成状态，返回值为true表示任务已完成，返回值为false表示任务未完成，可以通过该方法来判断任务的进度和状态，以便在任务列表中显示和管理任务对象
     public boolean getCompleted() {
         return this.mCompleted;
     }
 
+    // 获取任务的备注信息，返回值为任务的备注内容，如果没有备注信息则返回null，可以通过该方法来获取任务的额外说明和细节，以便在任务列表中显示和管理任务对象
     public String getNotes() {
         return this.mNotes;
     }
 
+    // 获取任务的前一个兄弟节点，返回值为任务的前一个兄弟节点对象，如果没有前一个兄弟节点则返回null，可以通过该方法来获取任务之间的层级关系和顺序，以便在任务列表中正确地显示和管理任务对象
     public Task getPriorSibling() {
         return this.mPriorSibling;
     }
 
+    // 获取任务所属的父节点，返回值为任务所属的父节点对象，如果没有父节点则返回null，可以通过该方法来获取任务之间的层级关系和组织结构，以便在任务列表中正确地显示和管理任务对象
     public TaskList getParent() {
         return this.mParent;
     }

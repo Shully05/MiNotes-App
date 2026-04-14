@@ -345,8 +345,7 @@ public class SqlNote {
                 }
                 mOriginParent = originParent;
 
-                // 版本号，如果JSON中没有指定该字段，则默认为0，表示初始版本
-                long version = note.has(NoteColumns.VERSION) ? note.getLong
+                // 处理关联的数据记录，遍历JSON数组中的数据记录，对于每个数据记录，如果在当前数据列表中找到对应ID的数据记录，则更新该数据记录的内容；如果没有找到对应ID的数据记录，则创建一个新的SqlData对象，并将数据字段设置到该对象中，然后添加到数据列表中
                 for (int i = 0; i < dataArray.length(); i++) {
                     JSONObject data = dataArray.getJSONObject(i);
                     SqlData sqlData = null;

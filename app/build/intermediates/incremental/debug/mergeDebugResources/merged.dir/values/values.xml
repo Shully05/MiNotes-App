@@ -16,6 +16,7 @@
     <dimen name="text_font_size_normal">17sp</dimen>
     <dimen name="text_font_size_small">14sp</dimen>
     <dimen name="text_font_size_super">33sp</dimen>
+    <item name="menu_copy" type="id"/>
     <plurals name="search_results_title">
          <item quantity="one"><ns1:g example="1" id="number">%1$s</ns1:g> result for \"<ns1:g example="???" id="search">%2$s</ns1:g>\"</item>
         

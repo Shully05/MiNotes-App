@@ -109,6 +109,8 @@ id ll_font_normal
 id ll_font_small
 id ll_font_super
 id menu_alert
+id menu_clear
+id menu_copy
 id menu_delete
 id menu_delete_remind
 id menu_export_text

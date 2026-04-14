@@ -44,6 +44,10 @@
         android:title="复制" />
 
     <item
+        android:id="@+id/menu_clear"
+        android:title="一键清空"/>
+
+    <item
         android:id="@+id/menu_send_to_desktop"
         android:title="@string/menu_send_to_desktop"/>
 

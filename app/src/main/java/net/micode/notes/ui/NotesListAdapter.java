@@ -30,26 +30,25 @@ import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Iterator;
 
-//适配器，负责把数据一条条放到列表里
 /**
- * 笔记列表适配器，用于在ListView中显示笔记数据
+ * 便签列表适配器
+ * 负责将数据库中的数据绑定到ListView的每一项
  */
 public class NotesListAdapter extends CursorAdapter {
     private static final String TAG = "NotesListAdapter";
-    private Context mContext; // 上下文对象
-    private HashMap<Integer, Boolean> mSelectedIndex; // 存储选中项的位置
-    private int mNotesCount; // 笔记总数
-    private boolean mChoiceMode; // 是否处于选择模式
+    private Context mContext;
+    private HashMap<Integer, Boolean> mSelectedIndex;  // 记录哪些位置被选中
+    private int mNotesCount;    // 笔记数量（不包括文件夹）
+    private boolean mChoiceMode; // 是否处于多选模式
 
-    // 定义应用小部件属性类
-    public static class AppWidgetAttribute {
-        public int widgetId; // 小部件ID
-        public int widgetType; // 小部件类型
-    };
     /**
-     * 构造函数
-     * @param context 上下文对象
+     * 小部件属性
      */
+    public static class AppWidgetAttribute {
+        public int widgetId;
+        public int widgetType;
+    };
+
     public NotesListAdapter(Context context) {
         super(context, null);
         mSelectedIndex = new HashMap<Integer, Boolean>();
@@ -58,63 +57,52 @@ public class NotesListAdapter extends CursorAdapter {
     }
 
     /**
-     * 创建新视图
+     * 创建新的列表项视图
      */
     @Override
     public View newView(Context context, Cursor cursor, ViewGroup parent) {
         return new NotesListItem(context);
     }
+
     /**
-     * 绑定数据到视图
+     * 将数据绑定到视图
      */
     @Override
     public void bindView(View view, Context context, Cursor cursor) {
         if (view instanceof NotesListItem) {
-            // 创建笔记项数据对象
             NoteItemData itemData = new NoteItemData(context, cursor);
-            // 绑定数据到笔记列表项视图
             ((NotesListItem) view).bind(context, itemData, mChoiceMode,
                     isSelectedItem(cursor.getPosition()));
         }
     }
 
     /**
-     * 设置项选中状态
-     * @param position 项位置
-     * @param checked 是否选中
+     * 设置某个位置是否选中
      */
     public void setCheckedItem(final int position, final boolean checked) {
         mSelectedIndex.put(position, checked);
-        notifyDataSetChanged();// 通知数据变化
+        notifyDataSetChanged();
     }
-
-    /**
-     * 是否处于选择模式
-     */
 
     public boolean isInChoiceMode() {
         return mChoiceMode;
     }
 
     /**
-     * 设置选择模式
-     * @param mode 是否开启选择模式
+     * 设置多选模式
      */
     public void setChoiceMode(boolean mode) {
-        mSelectedIndex.clear(); // 清空选中项
-        mChoiceMode = mode; // 设置选择模式
+        mSelectedIndex.clear();
+        mChoiceMode = mode;
     }
 
     /**
-     * 全选或取消全选
-     * @param checked 是否全选
+     * 全选/取消全选
      */
     public void selectAll(boolean checked) {
         Cursor cursor = getCursor();
-        // 遍历所有项
         for (int i = 0; i < getCount(); i++) {
             if (cursor.moveToPosition(i)) {
-                // 只处理普通笔记类型
                 if (NoteItemData.getNoteType(cursor) == Notes.TYPE_NOTE) {
                     setCheckedItem(i, checked);
                 }
@@ -123,15 +111,13 @@ public class NotesListAdapter extends CursorAdapter {
     }
 
     /**
-     * 获取选中项的ID集合
+     * 获取所有选中的笔记ID
      */
     public HashSet<Long> getSelectedItemIds() {
         HashSet<Long> itemSet = new HashSet<Long>();
-        // 遍历选中项
         for (Integer position : mSelectedIndex.keySet()) {
             if (mSelectedIndex.get(position) == true) {
                 Long id = getItemId(position);
-                // 过滤根文件夹ID
                 if (id == Notes.ID_ROOT_FOLDER) {
                     Log.d(TAG, "Wrong item id, should not happen");
                 } else {
@@ -143,36 +129,30 @@ public class NotesListAdapter extends CursorAdapter {
     }
 
     /**
-     * 获取选中项的小部件属性集合
+     * 获取选中笔记关联的小部件
      */
     public HashSet<AppWidgetAttribute> getSelectedWidget() {
         HashSet<AppWidgetAttribute> itemSet = new HashSet<AppWidgetAttribute>();
-        // 遍历选中项
-
         for (Integer position : mSelectedIndex.keySet()) {
             if (mSelectedIndex.get(position) == true) {
                 Cursor c = (Cursor) getItem(position);
                 if (c != null) {
                     AppWidgetAttribute widget = new AppWidgetAttribute();
                     NoteItemData item = new NoteItemData(mContext, c);
-
-                    widget.widgetId = item.getWidgetId(); // 获取小部件ID
-                    widget.widgetType = item.getWidgetType(); // 获取小部件类型
+                    widget.widgetId = item.getWidgetId();
+                    widget.widgetType = item.getWidgetType();
                     itemSet.add(widget);
-                    // 不要在这里关闭游标，只有适配器可以关闭它
                 } else {
-                    Log.e(TAG, "Invalid cursor"); // 日志错误
-
+                    Log.e(TAG, "Invalid cursor");
                     return null;
                 }
             }
         }
-
         return itemSet;
     }
 
     /**
-     * 获取选中项数量
+     * 获取选中数量
      */
     public int getSelectedCount() {
         Collection<Boolean> values = mSelectedIndex.values();
@@ -181,7 +161,6 @@ public class NotesListAdapter extends CursorAdapter {
         }
         Iterator<Boolean> iter = values.iterator();
         int count = 0;
-        // 统计选中项数量
         while (iter.hasNext()) {
             if (true == iter.next()) {
                 count++;
@@ -191,7 +170,7 @@ public class NotesListAdapter extends CursorAdapter {
     }
 
     /**
-     * 是否全部选中
+     * 是否全选
      */
     public boolean isAllSelected() {
         int checkedCount = getSelectedCount();
@@ -199,7 +178,7 @@ public class NotesListAdapter extends CursorAdapter {
     }
 
     /**
-     * 判断指定位置项是否被选中
+     * 判断指定位置是否选中
      */
     public boolean isSelectedItem(final int position) {
         if (null == mSelectedIndex.get(position)) {
@@ -208,43 +187,33 @@ public class NotesListAdapter extends CursorAdapter {
         return mSelectedIndex.get(position);
     }
 
-    /**
-     * 内容变化时的回调
-     */
     @Override
     protected void onContentChanged() {
         super.onContentChanged();
-        calcNotesCount();// 重新计算笔记数量
+        calcNotesCount();
     }
 
-    /**
-     * 更换Cursor时的回调
-     */
     @Override
     public void changeCursor(Cursor cursor) {
         super.changeCursor(cursor);
-        calcNotesCount();// 重新计算笔记数量
+        calcNotesCount();
     }
 
     /**
-     * 计算笔记数量
+     * 统计笔记数量（不包括文件夹）
      */
     private void calcNotesCount() {
         mNotesCount = 0;
-        // 遍历所有项
         for (int i = 0; i < getCount(); i++) {
             Cursor c = (Cursor) getItem(i);
             if (c != null) {
-                // 只统计普通笔记类型
                 if (NoteItemData.getNoteType(c) == Notes.TYPE_NOTE) {
                     mNotesCount++;
                 }
             } else {
                 Log.e(TAG, "Invalid cursor");
-
                 return;
             }
         }
     }
-
 }

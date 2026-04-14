@@ -547,8 +547,6 @@ public class NoteEditActivity extends Activity implements OnClickListener,
             case R.id.menu_delete_remind:
                 mWorkingNote.setAlertDate(0, false);
                 break;
-<<<<<<< Updated upstream
-=======
 
             case R.id.menu_copy:    //一键复制
                 copyNoteContent();  // 调用新方法，复制内容到剪贴板
@@ -558,8 +556,7 @@ public class NoteEditActivity extends Activity implements OnClickListener,
                 // 核心逻辑：直接把编辑框的内容设为空字符串
                 mNoteEditor.getText().clear();
                 break;
-                
->>>>>>> Stashed changes
+
             default:
                 break;
         }

@@ -130,9 +130,16 @@ public class NotesListActivity extends Activity implements OnClickListener, OnIt
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+        setTheme(android.R.style.Theme_Holo_Light_DarkActionBar);
+        // 设置主题，使用带有暗色 ActionBar 的 Holo Light 主题，显示菜单键
+        
         super.onCreate(savedInstanceState);
         setContentView(R.layout.note_list);
         initResources();
+
+        // 强制显示溢出菜单（那三个点）
+        getWindow().getDecorView().setSystemUiVisibility(0);
+
 
         /**
          * 首次使用时插入引导笔记

@@ -29,17 +29,21 @@ import android.content.DialogInterface.OnClickListener;
 import android.text.format.DateFormat;
 import android.text.format.DateUtils;
 
+// 日期时间选择对话框类，继承自AlertDialog，用于显示一个日期时间选择器供用户选择日期和时间。
 public class DateTimePickerDialog extends AlertDialog implements OnClickListener {
 
+    // 定义成员变量，包括日期对象、24小时制标志、日期时间设置监听器和日期时间选择器视图。
     private Calendar mDate = Calendar.getInstance();
     private boolean mIs24HourView;
     private OnDateTimeSetListener mOnDateTimeSetListener;
     private DateTimePicker mDateTimePicker;
 
+    // 定义日期时间设置监听器接口，当用户设置日期时间后会调用这个接口的方法。
     public interface OnDateTimeSetListener {
         void OnDateTimeSet(AlertDialog dialog, long date);
     }
 
+    // 构造函数，传入上下文、日期时间、是否24小时制标志。
     public DateTimePickerDialog(Context context, long date) {
         super(context);
         mDateTimePicker = new DateTimePicker(context);
@@ -64,14 +68,18 @@ public class DateTimePickerDialog extends AlertDialog implements OnClickListener
         updateTitle(mDate.getTimeInMillis());
     }
 
+    // 设置是否24小时制显示。
     public void set24HourView(boolean is24HourView) {
         mIs24HourView = is24HourView;
     }
 
+    // 获取是否24小时制显示的标志。
     public void setOnDateTimeSetListener(OnDateTimeSetListener callBack) {
+        // 设置日期时间设置监听器，当用户设置日期时间后会调用这个接口的方法。
         mOnDateTimeSetListener = callBack;
     }
 
+    // 更新标题栏显示。根据当前选择的日期时间，格式化成字符串并设置为标题。
     private void updateTitle(long date) {
         int flag =
             DateUtils.FORMAT_SHOW_YEAR |
@@ -81,7 +89,9 @@ public class DateTimePickerDialog extends AlertDialog implements OnClickListener
         setTitle(DateUtils.formatDateTime(this.getContext(), date, flag));
     }
 
+    // 当用户点击确定按钮时调用这个方法，将选择的日期时间传递给监听器。
     public void onClick(DialogInterface arg0, int arg1) {
+        // 当用户点击确定按钮时调用这个方法，将选择的日期时间传递给监听器。
         if (mOnDateTimeSetListener != null) {
             mOnDateTimeSetListener.OnDateTimeSet(this, mDate.getTimeInMillis());
         }

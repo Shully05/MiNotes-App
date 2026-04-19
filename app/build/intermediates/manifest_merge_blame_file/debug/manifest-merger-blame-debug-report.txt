@@ -20,263 +20,298 @@
 20    android:versionName="0.1" >
 21
 22    <uses-sdk
-22-->D:\Users\user\StudioProjects\Notes-master\app\src\main\AndroidManifest.xml:23:5-44
+22-->D:\RJGC\MiNotes-App\app\src\main\AndroidManifest.xml:23:5-44
 23        android:minSdkVersion="14"
-23-->D:\Users\user\StudioProjects\Notes-master\app\src\main\AndroidManifest.xml:23:15-41
+23-->D:\RJGC\MiNotes-App\app\src\main\AndroidManifest.xml:23:15-41
 24        android:targetSdkVersion="14" />
 25
-26    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
-26-->D:\Users\user\StudioProjects\Notes-master\app\src\main\AndroidManifest.xml:25:5-81
-26-->D:\Users\user\StudioProjects\Notes-master\app\src\main\AndroidManifest.xml:25:22-78
-27    <uses-permission android:name="com.android.launcher.permission.INSTALL_SHORTCUT" />
-27-->D:\Users\user\StudioProjects\Notes-master\app\src\main\AndroidManifest.xml:26:5-88
-27-->D:\Users\user\StudioProjects\Notes-master\app\src\main\AndroidManifest.xml:26:22-85
-28    <uses-permission android:name="android.permission.INTERNET" />
-28-->D:\Users\user\StudioProjects\Notes-master\app\src\main\AndroidManifest.xml:27:5-67
-28-->D:\Users\user\StudioProjects\Notes-master\app\src\main\AndroidManifest.xml:27:22-64
-29    <uses-permission android:name="android.permission.READ_CONTACTS" />
-29-->D:\Users\user\StudioProjects\Notes-master\app\src\main\AndroidManifest.xml:28:5-72
-29-->D:\Users\user\StudioProjects\Notes-master\app\src\main\AndroidManifest.xml:28:22-69
-30    <uses-permission android:name="android.permission.MANAGE_ACCOUNTS" />
-30-->D:\Users\user\StudioProjects\Notes-master\app\src\main\AndroidManifest.xml:29:5-74
-30-->D:\Users\user\StudioProjects\Notes-master\app\src\main\AndroidManifest.xml:29:22-71
-31    <uses-permission android:name="android.permission.AUTHENTICATE_ACCOUNTS" />
-31-->D:\Users\user\StudioProjects\Notes-master\app\src\main\AndroidManifest.xml:30:5-80
-31-->D:\Users\user\StudioProjects\Notes-master\app\src\main\AndroidManifest.xml:30:22-77
-32    <uses-permission android:name="android.permission.GET_ACCOUNTS" />
-32-->D:\Users\user\StudioProjects\Notes-master\app\src\main\AndroidManifest.xml:31:5-71
-32-->D:\Users\user\StudioProjects\Notes-master\app\src\main\AndroidManifest.xml:31:22-68
-33    <uses-permission android:name="android.permission.USE_CREDENTIALS" />
-33-->D:\Users\user\StudioProjects\Notes-master\app\src\main\AndroidManifest.xml:32:5-74
-33-->D:\Users\user\StudioProjects\Notes-master\app\src\main\AndroidManifest.xml:32:22-71
-34    <uses-permission android:name="android.permission.RECEIVE_BOOT_COMPLETED" />
-34-->D:\Users\user\StudioProjects\Notes-master\app\src\main\AndroidManifest.xml:33:5-81
-34-->D:\Users\user\StudioProjects\Notes-master\app\src\main\AndroidManifest.xml:33:22-78
-35
-36    <application
-36-->D:\Users\user\StudioProjects\Notes-master\app\src\main\AndroidManifest.xml:35:5-154:19
-37        android:debuggable="true"
-38        android:extractNativeLibs="true"
-39        android:icon="@drawable/icon_app"
-39-->D:\Users\user\StudioProjects\Notes-master\app\src\main\AndroidManifest.xml:36:9-42
-40        android:label="@string/app_name"
-40-->D:\Users\user\StudioProjects\Notes-master\app\src\main\AndroidManifest.xml:37:9-41
-41        android:testOnly="true" >
-42        <activity
-42-->D:\Users\user\StudioProjects\Notes-master\app\src\main\AndroidManifest.xml:38:9-51:20
-43            android:name="net.micode.notes.ui.NotesListActivity"
-43-->D:\Users\user\StudioProjects\Notes-master\app\src\main\AndroidManifest.xml:39:13-49
-44            android:configChanges="keyboardHidden|orientation|screenSize"
-44-->D:\Users\user\StudioProjects\Notes-master\app\src\main\AndroidManifest.xml:40:13-74
-45            android:label="@string/app_name"
-45-->D:\Users\user\StudioProjects\Notes-master\app\src\main\AndroidManifest.xml:41:13-45
-46            android:launchMode="singleTop"
-46-->D:\Users\user\StudioProjects\Notes-master\app\src\main\AndroidManifest.xml:42:13-43
-47            android:theme="@style/NoteTheme"
-47-->D:\Users\user\StudioProjects\Notes-master\app\src\main\AndroidManifest.xml:43:13-45
-48            android:uiOptions="splitActionBarWhenNarrow"
-48-->D:\Users\user\StudioProjects\Notes-master\app\src\main\AndroidManifest.xml:44:13-57
-49            android:windowSoftInputMode="adjustPan" >
-49-->D:\Users\user\StudioProjects\Notes-master\app\src\main\AndroidManifest.xml:45:13-52
-50            <intent-filter>
-50-->D:\Users\user\StudioProjects\Notes-master\app\src\main\AndroidManifest.xml:47:13-50:29
-51                <action android:name="android.intent.action.MAIN" />
-51-->D:\Users\user\StudioProjects\Notes-master\app\src\main\AndroidManifest.xml:48:17-69
-51-->D:\Users\user\StudioProjects\Notes-master\app\src\main\AndroidManifest.xml:48:25-66
-52
-53                <category android:name="android.intent.category.LAUNCHER" />
-53-->D:\Users\user\StudioProjects\Notes-master\app\src\main\AndroidManifest.xml:49:17-77
-53-->D:\Users\user\StudioProjects\Notes-master\app\src\main\AndroidManifest.xml:49:27-74
-54            </intent-filter>
-55        </activity>
-56
-57        <!-- 👇👇👇 添加下面这两行 👇👇👇 -->
-58        <uses-library
-58-->D:\Users\user\StudioProjects\Notes-master\app\src\main\AndroidManifest.xml:54:9-56:40
-59            android:name="org.apache.http.legacy"
-59-->D:\Users\user\StudioProjects\Notes-master\app\src\main\AndroidManifest.xml:55:13-50
-60            android:required="false" />
-60-->D:\Users\user\StudioProjects\Notes-master\app\src\main\AndroidManifest.xml:56:13-37
-61
-62        <activity
-62-->D:\Users\user\StudioProjects\Notes-master\app\src\main\AndroidManifest.xml:58:9-86:20
-63            android:name="net.micode.notes.ui.NoteEditActivity"
-63-->D:\Users\user\StudioProjects\Notes-master\app\src\main\AndroidManifest.xml:59:13-48
-64            android:configChanges="keyboardHidden|orientation|screenSize"
-64-->D:\Users\user\StudioProjects\Notes-master\app\src\main\AndroidManifest.xml:60:13-74
-65            android:launchMode="singleTop"
-65-->D:\Users\user\StudioProjects\Notes-master\app\src\main\AndroidManifest.xml:61:13-43
-66            android:theme="@style/NoteTheme" >
-66-->D:\Users\user\StudioProjects\Notes-master\app\src\main\AndroidManifest.xml:62:13-45
-67            <intent-filter>
-67-->D:\Users\user\StudioProjects\Notes-master\app\src\main\AndroidManifest.xml:64:13-69:29
-68                <action android:name="android.intent.action.VIEW" />
-68-->D:\Users\user\StudioProjects\Notes-master\app\src\main\AndroidManifest.xml:65:17-69
-68-->D:\Users\user\StudioProjects\Notes-master\app\src\main\AndroidManifest.xml:65:25-66
-69
-70                <category android:name="android.intent.category.DEFAULT" />
-70-->D:\Users\user\StudioProjects\Notes-master\app\src\main\AndroidManifest.xml:66:17-76
-70-->D:\Users\user\StudioProjects\Notes-master\app\src\main\AndroidManifest.xml:66:27-73
-71
-72                <data android:mimeType="vnd.android.cursor.item/text_note" />
-72-->D:\Users\user\StudioProjects\Notes-master\app\src\main\AndroidManifest.xml:67:17-78
-72-->D:\Users\user\StudioProjects\Notes-master\app\src\main\AndroidManifest.xml:67:23-75
-73                <data android:mimeType="vnd.android.cursor.item/call_note" />
-73-->D:\Users\user\StudioProjects\Notes-master\app\src\main\AndroidManifest.xml:67:17-78
-73-->D:\Users\user\StudioProjects\Notes-master\app\src\main\AndroidManifest.xml:67:23-75
-74            </intent-filter>
-75            <intent-filter>
-75-->D:\Users\user\StudioProjects\Notes-master\app\src\main\AndroidManifest.xml:71:13-76:29
-76                <action android:name="android.intent.action.INSERT_OR_EDIT" />
-76-->D:\Users\user\StudioProjects\Notes-master\app\src\main\AndroidManifest.xml:72:17-79
-76-->D:\Users\user\StudioProjects\Notes-master\app\src\main\AndroidManifest.xml:72:25-76
-77
-78                <category android:name="android.intent.category.DEFAULT" />
-78-->D:\Users\user\StudioProjects\Notes-master\app\src\main\AndroidManifest.xml:66:17-76
-78-->D:\Users\user\StudioProjects\Notes-master\app\src\main\AndroidManifest.xml:66:27-73
-79
-80                <data android:mimeType="vnd.android.cursor.item/text_note" />
-80-->D:\Users\user\StudioProjects\Notes-master\app\src\main\AndroidManifest.xml:67:17-78
-80-->D:\Users\user\StudioProjects\Notes-master\app\src\main\AndroidManifest.xml:67:23-75
-81                <data android:mimeType="vnd.android.cursor.item/call_note" />
-81-->D:\Users\user\StudioProjects\Notes-master\app\src\main\AndroidManifest.xml:67:17-78
-81-->D:\Users\user\StudioProjects\Notes-master\app\src\main\AndroidManifest.xml:67:23-75
-82            </intent-filter>
-83            <intent-filter>
-83-->D:\Users\user\StudioProjects\Notes-master\app\src\main\AndroidManifest.xml:78:13-81:29
-84                <action android:name="android.intent.action.SEARCH" />
-84-->D:\Users\user\StudioProjects\Notes-master\app\src\main\AndroidManifest.xml:79:17-71
-84-->D:\Users\user\StudioProjects\Notes-master\app\src\main\AndroidManifest.xml:79:25-68
-85
-86                <category android:name="android.intent.category.DEFAULT" />
-86-->D:\Users\user\StudioProjects\Notes-master\app\src\main\AndroidManifest.xml:66:17-76
-86-->D:\Users\user\StudioProjects\Notes-master\app\src\main\AndroidManifest.xml:66:27-73
-87            </intent-filter>
-88
-89            <meta-data
-89-->D:\Users\user\StudioProjects\Notes-master\app\src\main\AndroidManifest.xml:83:13-85:54
-90                android:name="android.app.searchable"
-90-->D:\Users\user\StudioProjects\Notes-master\app\src\main\AndroidManifest.xml:84:17-54
-91                android:resource="@xml/searchable" />
-91-->D:\Users\user\StudioProjects\Notes-master\app\src\main\AndroidManifest.xml:85:17-51
-92        </activity>
-93
-94        <provider
-94-->D:\Users\user\StudioProjects\Notes-master\app\src\main\AndroidManifest.xml:88:9-91:43
-95            android:name="net.micode.notes.data.NotesProvider"
-95-->D:\Users\user\StudioProjects\Notes-master\app\src\main\AndroidManifest.xml:89:13-63
-96            android:authorities="micode_notes"
-96-->D:\Users\user\StudioProjects\Notes-master\app\src\main\AndroidManifest.xml:90:13-47
-97            android:multiprocess="true" />
-97-->D:\Users\user\StudioProjects\Notes-master\app\src\main\AndroidManifest.xml:91:13-40
-98
-99        <receiver
-99-->D:\Users\user\StudioProjects\Notes-master\app\src\main\AndroidManifest.xml:93:9-105:20
-100            android:name="net.micode.notes.widget.NoteWidgetProvider_2x"
-100-->D:\Users\user\StudioProjects\Notes-master\app\src\main\AndroidManifest.xml:94:13-57
-101            android:label="@string/app_widget2x2" >
-101-->D:\Users\user\StudioProjects\Notes-master\app\src\main\AndroidManifest.xml:95:13-50
-102            <intent-filter>
-102-->D:\Users\user\StudioProjects\Notes-master\app\src\main\AndroidManifest.xml:96:13-100:29
-103                <action android:name="android.appwidget.action.APPWIDGET_UPDATE" />
-103-->D:\Users\user\StudioProjects\Notes-master\app\src\main\AndroidManifest.xml:97:17-84
-103-->D:\Users\user\StudioProjects\Notes-master\app\src\main\AndroidManifest.xml:97:25-81
-104                <action android:name="android.appwidget.action.APPWIDGET_DELETED" />
-104-->D:\Users\user\StudioProjects\Notes-master\app\src\main\AndroidManifest.xml:98:17-85
-104-->D:\Users\user\StudioProjects\Notes-master\app\src\main\AndroidManifest.xml:98:25-82
-105                <action android:name="android.intent.action.PRIVACY_MODE_CHANGED" />
-105-->D:\Users\user\StudioProjects\Notes-master\app\src\main\AndroidManifest.xml:99:17-85
-105-->D:\Users\user\StudioProjects\Notes-master\app\src\main\AndroidManifest.xml:99:25-82
-106            </intent-filter>
-107
-108            <meta-data
-108-->D:\Users\user\StudioProjects\Notes-master\app\src\main\AndroidManifest.xml:102:13-104:58
-109                android:name="android.appwidget.provider"
-109-->D:\Users\user\StudioProjects\Notes-master\app\src\main\AndroidManifest.xml:103:17-58
-110                android:resource="@xml/widget_2x_info" />
-110-->D:\Users\user\StudioProjects\Notes-master\app\src\main\AndroidManifest.xml:104:17-55
-111        </receiver>
-112        <receiver
-112-->D:\Users\user\StudioProjects\Notes-master\app\src\main\AndroidManifest.xml:106:9-119:20
-113            android:name="net.micode.notes.widget.NoteWidgetProvider_4x"
-113-->D:\Users\user\StudioProjects\Notes-master\app\src\main\AndroidManifest.xml:107:13-57
-114            android:label="@string/app_widget4x4" >
-114-->D:\Users\user\StudioProjects\Notes-master\app\src\main\AndroidManifest.xml:108:13-50
-115            <intent-filter>
-115-->D:\Users\user\StudioProjects\Notes-master\app\src\main\AndroidManifest.xml:96:13-100:29
-116                <action android:name="android.appwidget.action.APPWIDGET_UPDATE" />
-116-->D:\Users\user\StudioProjects\Notes-master\app\src\main\AndroidManifest.xml:97:17-84
-116-->D:\Users\user\StudioProjects\Notes-master\app\src\main\AndroidManifest.xml:97:25-81
-117                <action android:name="android.appwidget.action.APPWIDGET_DELETED" />
-117-->D:\Users\user\StudioProjects\Notes-master\app\src\main\AndroidManifest.xml:98:17-85
-117-->D:\Users\user\StudioProjects\Notes-master\app\src\main\AndroidManifest.xml:98:25-82
-118                <action android:name="android.intent.action.PRIVACY_MODE_CHANGED" />
-118-->D:\Users\user\StudioProjects\Notes-master\app\src\main\AndroidManifest.xml:99:17-85
-118-->D:\Users\user\StudioProjects\Notes-master\app\src\main\AndroidManifest.xml:99:25-82
-119            </intent-filter>
-120
-121            <meta-data
-121-->D:\Users\user\StudioProjects\Notes-master\app\src\main\AndroidManifest.xml:102:13-104:58
-122                android:name="android.appwidget.provider"
-122-->D:\Users\user\StudioProjects\Notes-master\app\src\main\AndroidManifest.xml:103:17-58
-123                android:resource="@xml/widget_4x_info" />
-123-->D:\Users\user\StudioProjects\Notes-master\app\src\main\AndroidManifest.xml:104:17-55
-124        </receiver>
-125        <receiver android:name="net.micode.notes.ui.AlarmInitReceiver" >
-125-->D:\Users\user\StudioProjects\Notes-master\app\src\main\AndroidManifest.xml:121:9-125:20
-125-->D:\Users\user\StudioProjects\Notes-master\app\src\main\AndroidManifest.xml:121:19-55
-126            <intent-filter>
-126-->D:\Users\user\StudioProjects\Notes-master\app\src\main\AndroidManifest.xml:122:13-124:29
-127                <action android:name="android.intent.action.BOOT_COMPLETED" />
-127-->D:\Users\user\StudioProjects\Notes-master\app\src\main\AndroidManifest.xml:123:17-79
-127-->D:\Users\user\StudioProjects\Notes-master\app\src\main\AndroidManifest.xml:123:25-76
-128            </intent-filter>
-129        </receiver>
-130        <receiver
-130-->D:\Users\user\StudioProjects\Notes-master\app\src\main\AndroidManifest.xml:127:9-130:20
-131            android:name="net.micode.notes.ui.AlarmReceiver"
-131-->D:\Users\user\StudioProjects\Notes-master\app\src\main\AndroidManifest.xml:128:13-61
-132            android:process=":remote" >
-132-->D:\Users\user\StudioProjects\Notes-master\app\src\main\AndroidManifest.xml:129:13-38
-133        </receiver>
-134
-135        <activity
-135-->D:\Users\user\StudioProjects\Notes-master\app\src\main\AndroidManifest.xml:132:9-137:20
-136            android:name="net.micode.notes.ui.AlarmAlertActivity"
-136-->D:\Users\user\StudioProjects\Notes-master\app\src\main\AndroidManifest.xml:133:13-50
-137            android:label="@string/app_name"
-137-->D:\Users\user\StudioProjects\Notes-master\app\src\main\AndroidManifest.xml:134:13-45
-138            android:launchMode="singleInstance"
-138-->D:\Users\user\StudioProjects\Notes-master\app\src\main\AndroidManifest.xml:135:13-48
-139            android:theme="@android:style/Theme.Holo.Wallpaper.NoTitleBar" >
-139-->D:\Users\user\StudioProjects\Notes-master\app\src\main\AndroidManifest.xml:136:13-75
-140        </activity>
-141        <activity
-141-->D:\Users\user\StudioProjects\Notes-master\app\src\main\AndroidManifest.xml:139:9-144:20
-142            android:name="net.micode.notes.ui.NotesPreferenceActivity"
-142-->D:\Users\user\StudioProjects\Notes-master\app\src\main\AndroidManifest.xml:140:13-71
-143            android:label="@string/preferences_title"
-143-->D:\Users\user\StudioProjects\Notes-master\app\src\main\AndroidManifest.xml:141:13-54
-144            android:launchMode="singleTop"
-144-->D:\Users\user\StudioProjects\Notes-master\app\src\main\AndroidManifest.xml:142:13-43
-145            android:theme="@android:style/Theme.Holo.Light" >
-145-->D:\Users\user\StudioProjects\Notes-master\app\src\main\AndroidManifest.xml:143:13-60
-146        </activity>
-147
-148        <service
-148-->D:\Users\user\StudioProjects\Notes-master\app\src\main\AndroidManifest.xml:146:9-149:19
-149            android:name="net.micode.notes.gtask.remote.GTaskSyncService"
-149-->D:\Users\user\StudioProjects\Notes-master\app\src\main\AndroidManifest.xml:147:13-74
-150            android:exported="false" >
-150-->D:\Users\user\StudioProjects\Notes-master\app\src\main\AndroidManifest.xml:148:13-37
-151        </service>
-152
-153        <meta-data
-153-->D:\Users\user\StudioProjects\Notes-master\app\src\main\AndroidManifest.xml:151:9-153:52
-154            android:name="android.app.default_searchable"
-154-->D:\Users\user\StudioProjects\Notes-master\app\src\main\AndroidManifest.xml:152:13-58
-155            android:value=".ui.NoteEditActivity" />
-155-->D:\Users\user\StudioProjects\Notes-master\app\src\main\AndroidManifest.xml:153:13-49
-156    </application>
-157
-158</manifest>
+26    <!-- 权限声明    如：写入SD卡、主屏幕添加快捷方式、访问网络等 -->
+27    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
+27-->D:\RJGC\MiNotes-App\app\src\main\AndroidManifest.xml:26:5-81
+27-->D:\RJGC\MiNotes-App\app\src\main\AndroidManifest.xml:26:22-78
+28    <uses-permission android:name="com.android.launcher.permission.INSTALL_SHORTCUT" />
+28-->D:\RJGC\MiNotes-App\app\src\main\AndroidManifest.xml:27:5-88
+28-->D:\RJGC\MiNotes-App\app\src\main\AndroidManifest.xml:27:22-85
+29    <uses-permission android:name="android.permission.INTERNET" />
+29-->D:\RJGC\MiNotes-App\app\src\main\AndroidManifest.xml:28:5-67
+29-->D:\RJGC\MiNotes-App\app\src\main\AndroidManifest.xml:28:22-64
+30    <uses-permission android:name="android.permission.READ_CONTACTS" />
+30-->D:\RJGC\MiNotes-App\app\src\main\AndroidManifest.xml:29:5-72
+30-->D:\RJGC\MiNotes-App\app\src\main\AndroidManifest.xml:29:22-69
+31    <uses-permission android:name="android.permission.MANAGE_ACCOUNTS" />
+31-->D:\RJGC\MiNotes-App\app\src\main\AndroidManifest.xml:30:5-74
+31-->D:\RJGC\MiNotes-App\app\src\main\AndroidManifest.xml:30:22-71
+32    <uses-permission android:name="android.permission.AUTHENTICATE_ACCOUNTS" />
+32-->D:\RJGC\MiNotes-App\app\src\main\AndroidManifest.xml:31:5-80
+32-->D:\RJGC\MiNotes-App\app\src\main\AndroidManifest.xml:31:22-77
+33    <uses-permission android:name="android.permission.GET_ACCOUNTS" />
+33-->D:\RJGC\MiNotes-App\app\src\main\AndroidManifest.xml:32:5-71
+33-->D:\RJGC\MiNotes-App\app\src\main\AndroidManifest.xml:32:22-68
+34    <uses-permission android:name="android.permission.USE_CREDENTIALS" />
+34-->D:\RJGC\MiNotes-App\app\src\main\AndroidManifest.xml:33:5-74
+34-->D:\RJGC\MiNotes-App\app\src\main\AndroidManifest.xml:33:22-71
+35    <uses-permission android:name="android.permission.RECEIVE_BOOT_COMPLETED" />
+35-->D:\RJGC\MiNotes-App\app\src\main\AndroidManifest.xml:34:5-81
+35-->D:\RJGC\MiNotes-App\app\src\main\AndroidManifest.xml:34:22-78
+36    <!-- 应用主体：定义了应用图标、名称以及所有组件 -->
+37    <application
+37-->D:\RJGC\MiNotes-App\app\src\main\AndroidManifest.xml:37:5-165:19
+38        android:debuggable="true"
+39        android:extractNativeLibs="true"
+40        android:icon="@drawable/icon_app"
+40-->D:\RJGC\MiNotes-App\app\src\main\AndroidManifest.xml:38:9-42
+41        android:label="@string/app_name"
+41-->D:\RJGC\MiNotes-App\app\src\main\AndroidManifest.xml:39:9-41
+42        android:testOnly="true" >
+43
+44        <!-- 主界面 -->
+45        <activity
+45-->D:\RJGC\MiNotes-App\app\src\main\AndroidManifest.xml:42:9-55:20
+46            android:name="net.micode.notes.ui.NotesListActivity"
+46-->D:\RJGC\MiNotes-App\app\src\main\AndroidManifest.xml:43:13-49
+47            android:configChanges="keyboardHidden|orientation|screenSize"
+47-->D:\RJGC\MiNotes-App\app\src\main\AndroidManifest.xml:44:13-74
+48            android:label="@string/app_name"
+48-->D:\RJGC\MiNotes-App\app\src\main\AndroidManifest.xml:45:13-45
+49            android:launchMode="singleTop"
+49-->D:\RJGC\MiNotes-App\app\src\main\AndroidManifest.xml:46:13-43
+50            android:theme="@style/NoteTheme"
+50-->D:\RJGC\MiNotes-App\app\src\main\AndroidManifest.xml:47:13-45
+51            android:uiOptions="splitActionBarWhenNarrow"
+51-->D:\RJGC\MiNotes-App\app\src\main\AndroidManifest.xml:48:13-57
+52            android:windowSoftInputMode="adjustPan" >
+52-->D:\RJGC\MiNotes-App\app\src\main\AndroidManifest.xml:49:13-52
+53            <intent-filter>
+53-->D:\RJGC\MiNotes-App\app\src\main\AndroidManifest.xml:51:13-54:29
+54                <action android:name="android.intent.action.MAIN" />
+54-->D:\RJGC\MiNotes-App\app\src\main\AndroidManifest.xml:52:17-69
+54-->D:\RJGC\MiNotes-App\app\src\main\AndroidManifest.xml:52:25-66
+55
+56                <category android:name="android.intent.category.LAUNCHER" />
+56-->D:\RJGC\MiNotes-App\app\src\main\AndroidManifest.xml:53:17-77
+56-->D:\RJGC\MiNotes-App\app\src\main\AndroidManifest.xml:53:27-74
+57            </intent-filter>
+58        </activity>
+59
+60        <!-- 添加下面这两行 -->
+61        <uses-library
+61-->D:\RJGC\MiNotes-App\app\src\main\AndroidManifest.xml:58:9-60:40
+62            android:name="org.apache.http.legacy"
+62-->D:\RJGC\MiNotes-App\app\src\main\AndroidManifest.xml:59:13-50
+63            android:required="false" />
+63-->D:\RJGC\MiNotes-App\app\src\main\AndroidManifest.xml:60:13-37
+64
+65        <!-- 编辑界面 -->
+66        <activity
+66-->D:\RJGC\MiNotes-App\app\src\main\AndroidManifest.xml:63:9-91:20
+67            android:name="net.micode.notes.ui.NoteEditActivity"
+67-->D:\RJGC\MiNotes-App\app\src\main\AndroidManifest.xml:64:13-48
+68            android:configChanges="keyboardHidden|orientation|screenSize"
+68-->D:\RJGC\MiNotes-App\app\src\main\AndroidManifest.xml:65:13-74
+69            android:launchMode="singleTop"
+69-->D:\RJGC\MiNotes-App\app\src\main\AndroidManifest.xml:66:13-43
+70            android:theme="@style/NoteTheme" >
+70-->D:\RJGC\MiNotes-App\app\src\main\AndroidManifest.xml:67:13-45
+71            <intent-filter android:scheme="http" >
+71-->D:\RJGC\MiNotes-App\app\src\main\AndroidManifest.xml:69:13-74:29
+71-->D:\RJGC\MiNotes-App\app\src\main\AndroidManifest.xml:69:28-49
+72                <action android:name="android.intent.action.VIEW" />
+72-->D:\RJGC\MiNotes-App\app\src\main\AndroidManifest.xml:70:17-69
+72-->D:\RJGC\MiNotes-App\app\src\main\AndroidManifest.xml:70:25-66
+73
+74                <category android:name="android.intent.category.DEFAULT" />
+74-->D:\RJGC\MiNotes-App\app\src\main\AndroidManifest.xml:71:17-76
+74-->D:\RJGC\MiNotes-App\app\src\main\AndroidManifest.xml:71:27-73
+75
+76                <data android:mimeType="vnd.android.cursor.item/text_note" />
+76-->D:\RJGC\MiNotes-App\app\src\main\AndroidManifest.xml:72:17-78
+76-->D:\RJGC\MiNotes-App\app\src\main\AndroidManifest.xml:72:23-75
+77                <data android:mimeType="vnd.android.cursor.item/call_note" />
+77-->D:\RJGC\MiNotes-App\app\src\main\AndroidManifest.xml:72:17-78
+77-->D:\RJGC\MiNotes-App\app\src\main\AndroidManifest.xml:72:23-75
+78            </intent-filter>
+79            <intent-filter>
+79-->D:\RJGC\MiNotes-App\app\src\main\AndroidManifest.xml:76:13-81:29
+80                <action android:name="android.intent.action.INSERT_OR_EDIT" />
+80-->D:\RJGC\MiNotes-App\app\src\main\AndroidManifest.xml:77:17-79
+80-->D:\RJGC\MiNotes-App\app\src\main\AndroidManifest.xml:77:25-76
+81
+82                <category android:name="android.intent.category.DEFAULT" />
+82-->D:\RJGC\MiNotes-App\app\src\main\AndroidManifest.xml:71:17-76
+82-->D:\RJGC\MiNotes-App\app\src\main\AndroidManifest.xml:71:27-73
+83
+84                <data android:mimeType="vnd.android.cursor.item/text_note" />
+84-->D:\RJGC\MiNotes-App\app\src\main\AndroidManifest.xml:72:17-78
+84-->D:\RJGC\MiNotes-App\app\src\main\AndroidManifest.xml:72:23-75
+85                <data android:mimeType="vnd.android.cursor.item/call_note" />
+85-->D:\RJGC\MiNotes-App\app\src\main\AndroidManifest.xml:72:17-78
+85-->D:\RJGC\MiNotes-App\app\src\main\AndroidManifest.xml:72:23-75
+86            </intent-filter>
+87            <intent-filter>
+87-->D:\RJGC\MiNotes-App\app\src\main\AndroidManifest.xml:83:13-86:29
+88                <action android:name="android.intent.action.SEARCH" />
+88-->D:\RJGC\MiNotes-App\app\src\main\AndroidManifest.xml:84:17-71
+88-->D:\RJGC\MiNotes-App\app\src\main\AndroidManifest.xml:84:25-68
+89
+90                <category android:name="android.intent.category.DEFAULT" />
+90-->D:\RJGC\MiNotes-App\app\src\main\AndroidManifest.xml:71:17-76
+90-->D:\RJGC\MiNotes-App\app\src\main\AndroidManifest.xml:71:27-73
+91            </intent-filter>
+92
+93            <meta-data
+93-->D:\RJGC\MiNotes-App\app\src\main\AndroidManifest.xml:88:13-90:54
+94                android:name="android.app.searchable"
+94-->D:\RJGC\MiNotes-App\app\src\main\AndroidManifest.xml:89:17-54
+95                android:resource="@xml/searchable" />
+95-->D:\RJGC\MiNotes-App\app\src\main\AndroidManifest.xml:90:17-51
+96        </activity>
+97
+98        <!-- 数据提供者   Android四大组件之一，负责管理应用用的数据库，并允许其他应用访问 -->
+99        <provider
+99-->D:\RJGC\MiNotes-App\app\src\main\AndroidManifest.xml:94:9-97:43
+100            android:name="net.micode.notes.data.NotesProvider"
+100-->D:\RJGC\MiNotes-App\app\src\main\AndroidManifest.xml:95:13-63
+101            android:authorities="micode_notes"
+101-->D:\RJGC\MiNotes-App\app\src\main\AndroidManifest.xml:96:13-47
+102            android:multiprocess="true" />
+102-->D:\RJGC\MiNotes-App\app\src\main\AndroidManifest.xml:97:13-40
+103
+104        <!-- 广播接收器  监听系统广播事件 -->
+105        <receiver
+105-->D:\RJGC\MiNotes-App\app\src\main\AndroidManifest.xml:100:9-112:20
+106            android:name="net.micode.notes.widget.NoteWidgetProvider_2x"
+106-->D:\RJGC\MiNotes-App\app\src\main\AndroidManifest.xml:101:13-57
+107            android:label="@string/app_widget2x2" >
+107-->D:\RJGC\MiNotes-App\app\src\main\AndroidManifest.xml:102:13-50
+108            <intent-filter>
+108-->D:\RJGC\MiNotes-App\app\src\main\AndroidManifest.xml:103:13-107:29
+109                <action android:name="android.appwidget.action.APPWIDGET_UPDATE" />
+109-->D:\RJGC\MiNotes-App\app\src\main\AndroidManifest.xml:104:17-84
+109-->D:\RJGC\MiNotes-App\app\src\main\AndroidManifest.xml:104:25-81
+110                <action android:name="android.appwidget.action.APPWIDGET_DELETED" />
+110-->D:\RJGC\MiNotes-App\app\src\main\AndroidManifest.xml:105:17-85
+110-->D:\RJGC\MiNotes-App\app\src\main\AndroidManifest.xml:105:25-82
+111                <action android:name="android.intent.action.PRIVACY_MODE_CHANGED" />
+111-->D:\RJGC\MiNotes-App\app\src\main\AndroidManifest.xml:106:17-85
+111-->D:\RJGC\MiNotes-App\app\src\main\AndroidManifest.xml:106:25-82
+112            </intent-filter>
+113
+114            <meta-data
+114-->D:\RJGC\MiNotes-App\app\src\main\AndroidManifest.xml:109:13-111:58
+115                android:name="android.appwidget.provider"
+115-->D:\RJGC\MiNotes-App\app\src\main\AndroidManifest.xml:110:17-58
+116                android:resource="@xml/widget_2x_info" />
+116-->D:\RJGC\MiNotes-App\app\src\main\AndroidManifest.xml:111:17-55
+117        </receiver>
+118        <receiver
+118-->D:\RJGC\MiNotes-App\app\src\main\AndroidManifest.xml:113:9-126:20
+119            android:name="net.micode.notes.widget.NoteWidgetProvider_4x"
+119-->D:\RJGC\MiNotes-App\app\src\main\AndroidManifest.xml:114:13-57
+120            android:label="@string/app_widget4x4" >
+120-->D:\RJGC\MiNotes-App\app\src\main\AndroidManifest.xml:115:13-50
+121            <intent-filter>
+121-->D:\RJGC\MiNotes-App\app\src\main\AndroidManifest.xml:103:13-107:29
+122                <action android:name="android.appwidget.action.APPWIDGET_UPDATE" />
+122-->D:\RJGC\MiNotes-App\app\src\main\AndroidManifest.xml:104:17-84
+122-->D:\RJGC\MiNotes-App\app\src\main\AndroidManifest.xml:104:25-81
+123                <action android:name="android.appwidget.action.APPWIDGET_DELETED" />
+123-->D:\RJGC\MiNotes-App\app\src\main\AndroidManifest.xml:105:17-85
+123-->D:\RJGC\MiNotes-App\app\src\main\AndroidManifest.xml:105:25-82
+124                <action android:name="android.intent.action.PRIVACY_MODE_CHANGED" />
+124-->D:\RJGC\MiNotes-App\app\src\main\AndroidManifest.xml:106:17-85
+124-->D:\RJGC\MiNotes-App\app\src\main\AndroidManifest.xml:106:25-82
+125            </intent-filter>
+126
+127            <meta-data
+127-->D:\RJGC\MiNotes-App\app\src\main\AndroidManifest.xml:109:13-111:58
+128                android:name="android.appwidget.provider"
+128-->D:\RJGC\MiNotes-App\app\src\main\AndroidManifest.xml:110:17-58
+129                android:resource="@xml/widget_4x_info" />
+129-->D:\RJGC\MiNotes-App\app\src\main\AndroidManifest.xml:111:17-55
+130        </receiver>
+131        <receiver android:name="net.micode.notes.ui.AlarmInitReceiver" >
+131-->D:\RJGC\MiNotes-App\app\src\main\AndroidManifest.xml:128:9-132:20
+131-->D:\RJGC\MiNotes-App\app\src\main\AndroidManifest.xml:128:19-55
+132            <intent-filter>
+132-->D:\RJGC\MiNotes-App\app\src\main\AndroidManifest.xml:129:13-131:29
+133                <action android:name="android.intent.action.BOOT_COMPLETED" />
+133-->D:\RJGC\MiNotes-App\app\src\main\AndroidManifest.xml:130:17-79
+133-->D:\RJGC\MiNotes-App\app\src\main\AndroidManifest.xml:130:25-76
+134            </intent-filter>
+135        </receiver>
+136        <receiver
+136-->D:\RJGC\MiNotes-App\app\src\main\AndroidManifest.xml:134:9-137:20
+137            android:name="net.micode.notes.ui.AlarmReceiver"
+137-->D:\RJGC\MiNotes-App\app\src\main\AndroidManifest.xml:135:13-61
+138            android:process=":remote" >
+138-->D:\RJGC\MiNotes-App\app\src\main\AndroidManifest.xml:136:13-38
+139        </receiver>
+140
+141        <!-- 闹钟弹窗界面 -->
+142        <activity
+142-->D:\RJGC\MiNotes-App\app\src\main\AndroidManifest.xml:140:9-145:20
+143            android:name="net.micode.notes.ui.AlarmAlertActivity"
+143-->D:\RJGC\MiNotes-App\app\src\main\AndroidManifest.xml:141:13-50
+144            android:label="@string/app_name"
+144-->D:\RJGC\MiNotes-App\app\src\main\AndroidManifest.xml:142:13-45
+145            android:launchMode="singleInstance"
+145-->D:\RJGC\MiNotes-App\app\src\main\AndroidManifest.xml:143:13-48
+146            android:theme="@android:style/Theme.Holo.Wallpaper.NoTitleBar" >
+146-->D:\RJGC\MiNotes-App\app\src\main\AndroidManifest.xml:144:13-75
+147        </activity>
+148
+149        <!-- 设置界面 -->
+150        <activity
+150-->D:\RJGC\MiNotes-App\app\src\main\AndroidManifest.xml:148:9-153:20
+151            android:name="net.micode.notes.ui.NotesPreferenceActivity"
+151-->D:\RJGC\MiNotes-App\app\src\main\AndroidManifest.xml:149:13-71
+152            android:label="@string/preferences_title"
+152-->D:\RJGC\MiNotes-App\app\src\main\AndroidManifest.xml:150:13-54
+153            android:launchMode="singleTop"
+153-->D:\RJGC\MiNotes-App\app\src\main\AndroidManifest.xml:151:13-43
+154            android:theme="@android:style/Theme.Holo.Light" >
+154-->D:\RJGC\MiNotes-App\app\src\main\AndroidManifest.xml:152:13-60
+155        </activity>
+156
+157        <!-- 服务    后台服务，与Google Tasks进行同步 -->
+158        <service
+158-->D:\RJGC\MiNotes-App\app\src\main\AndroidManifest.xml:156:9-159:19
+159            android:name="net.micode.notes.gtask.remote.GTaskSyncService"
+159-->D:\RJGC\MiNotes-App\app\src\main\AndroidManifest.xml:157:13-74
+160            android:exported="false" >
+160-->D:\RJGC\MiNotes-App\app\src\main\AndroidManifest.xml:158:13-37
+161        </service>
+162
+163        <!-- 默认搜索配置 -->
+164        <meta-data
+164-->D:\RJGC\MiNotes-App\app\src\main\AndroidManifest.xml:162:9-164:52
+165            android:name="android.app.default_searchable"
+165-->D:\RJGC\MiNotes-App\app\src\main\AndroidManifest.xml:163:13-58
+166            android:value=".ui.NoteEditActivity" />
+166-->D:\RJGC\MiNotes-App\app\src\main\AndroidManifest.xml:164:13-49
+167    </application>
+168
+169</manifest><!--
+170总结：
+171    数据层：通过 NotesProvider 管理 SQLite 数据库。
+172    界面层：包含列表、编辑、设置、闹钟弹窗等多个 Activity。
+173    后台层：包含同步服务（SyncService）和闹钟管理（AlarmReceiver）。
+174    扩展性：支持桌面小部件（Widget）和全局搜索。
+175
+176    共四个界面组件（Activity）：
+177    1. NotesListActivity：主界面，显示笔记列表。
+178    2. NoteEditActivity：编辑界面，处理笔记的创建和修改。
+179    3. AlarmAlertActivity：闹钟弹窗界面，提醒用户。
+180    4. NotesPreferenceActivity：设置界面，允许用户配置应用选项。
+181    一个数据提供者（Provider）：
+182    NotesProvider：管理笔记数据的存储和访问。
+183    四个广播接收器（Receiver）：
+184    1. NoteWidgetProvider_2x 和 NoteWidgetProvider_4x：管理桌面小部件的更新和删除。
+185    2. AlarmInitReceiver：监听系统启动完成事件，初始化闹钟设置。
+186    3. AlarmReceiver：处理闹钟触发事件。
+187    一个服务（Service）：
+188    GTaskSyncService：负责与 Google Tasks 进行数据同步。
+189
+190    项目的入口是 NotesListActivity。整个应用的核心交互逻辑围绕着‘列表展示’和‘单条编辑’两个页面展开，
+191    同时通过 AlarmAlertActivity 实现了全屏闹钟提醒功能，架构非常清晰。
+192-->

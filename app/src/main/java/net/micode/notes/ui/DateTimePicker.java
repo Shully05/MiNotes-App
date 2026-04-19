@@ -28,6 +28,7 @@ import android.view.View;
 import android.widget.FrameLayout;
 import android.widget.NumberPicker;
 
+// 日期时间选择器类，继承自FrameLayout，用于显示一个日期时间选择器供用户选择日期和时间。
 public class DateTimePicker extends FrameLayout {
 
     private static final boolean DEFAULT_ENABLE_STATE = true;
@@ -64,6 +65,7 @@ public class DateTimePicker extends FrameLayout {
 
     private OnDateTimeChangedListener mOnDateTimeChangedListener;
 
+    // 定义日期时间改变监听器接口，当用户改变日期时间时会调用这个接口的方法。
     private NumberPicker.OnValueChangeListener mOnDateChangedListener = new NumberPicker.OnValueChangeListener() {
         @Override
         public void onValueChange(NumberPicker picker, int oldVal, int newVal) {
@@ -73,11 +75,17 @@ public class DateTimePicker extends FrameLayout {
         }
     };
 
+    // 定义小时改变监听器，当用户改变小时时会调用这个接口的方法。
     private NumberPicker.OnValueChangeListener mOnHourChangedListener = new NumberPicker.OnValueChangeListener() {
         @Override
         public void onValueChange(NumberPicker picker, int oldVal, int newVal) {
             boolean isDateChanged = false;
             Calendar cal = Calendar.getInstance();
+            // 根据是否24小时制显示，判断用户改变小时后是否需要改变日期。
+            // 如果是24小时制显示，当小时从23变为0时，日期需要加一天；
+            // 当小时从0变为23时，日期需要减一天。
+            // 如果是12小时制显示，当小时从11变为12时，日期需要加一天；
+            // 当小时从12变为11时，日期需要减一天。同时还需要更新AM/PM的显示。
             if (!mIs24HourView) {
                 if (!mIsAm && oldVal == HOURS_IN_HALF_DAY - 1 && newVal == HOURS_IN_HALF_DAY) {
                     cal.setTimeInMillis(mDate.getTimeInMillis());
@@ -104,6 +112,7 @@ public class DateTimePicker extends FrameLayout {
                     isDateChanged = true;
                 }
             }
+            // 更新日期时间对象中的小时值，并调用日期时间改变监听器的方法。
             int newHour = mHourSpinner.getValue() % HOURS_IN_HALF_DAY + (mIsAm ? 0 : HOURS_IN_HALF_DAY);
             mDate.set(Calendar.HOUR_OF_DAY, newHour);
             onDateTimeChanged();
@@ -115,6 +124,7 @@ public class DateTimePicker extends FrameLayout {
         }
     };
 
+    // 定义分钟改变监听器，当用户改变分钟时会调用这个接口的方法。
     private NumberPicker.OnValueChangeListener mOnMinuteChangedListener = new NumberPicker.OnValueChangeListener() {
         @Override
         public void onValueChange(NumberPicker picker, int oldVal, int newVal) {
@@ -144,6 +154,7 @@ public class DateTimePicker extends FrameLayout {
         }
     };
 
+    // 定义AM/PM改变监听器，当用户改变AM/PM时会调用这个接口的方法。
     private NumberPicker.OnValueChangeListener mOnAmPmChangedListener = new NumberPicker.OnValueChangeListener() {
         @Override
         public void onValueChange(NumberPicker picker, int oldVal, int newVal) {
@@ -158,19 +169,23 @@ public class DateTimePicker extends FrameLayout {
         }
     };
 
+    // 定义日期时间改变监听器接口，当用户改变日期时间时会调用这个接口的方法。
     public interface OnDateTimeChangedListener {
         void onDateTimeChanged(DateTimePicker view, int year, int month,
                 int dayOfMonth, int hourOfDay, int minute);
     }
 
+    // 设置日期时间改变监听器。
     public DateTimePicker(Context context) {
         this(context, System.currentTimeMillis());
     }
 
+    // 构造函数，传入上下文和日期时间，初始化日期时间选择器。
     public DateTimePicker(Context context, long date) {
         this(context, date, DateFormat.is24HourFormat(context));
     }
 
+    // 构造函数，传入上下文、日期时间和是否24小时制标志，初始化日期时间选择器。
     public DateTimePicker(Context context, long date, boolean is24HourView) {
         super(context);
         mDate = Calendar.getInstance();
@@ -214,6 +229,7 @@ public class DateTimePicker extends FrameLayout {
         mInitialising = false;
     }
 
+    // 设置是否启用日期时间选择器。
     @Override
     public void setEnabled(boolean enabled) {
         if (mIsEnabled == enabled) {
@@ -227,6 +243,7 @@ public class DateTimePicker extends FrameLayout {
         mIsEnabled = enabled;
     }
 
+    // 获取是否启用日期时间选择器的标志。
     @Override
     public boolean isEnabled() {
         return mIsEnabled;
@@ -434,6 +451,7 @@ public class DateTimePicker extends FrameLayout {
         updateAmPmControl();
     }
 
+    // 更新日期控件。根据当前日期时间对象中的日期值，计算出日期显示字符串，并设置到日期选择器上。
     private void updateDateControl() {
         Calendar cal = Calendar.getInstance();
         cal.setTimeInMillis(mDate.getTimeInMillis());
@@ -448,6 +466,7 @@ public class DateTimePicker extends FrameLayout {
         mDateSpinner.invalidate();
     }
 
+    // 更新AM/PM控件。根据当前日期时间对象中的小时值，计算出AM/PM显示字符串，并设置到AM/PM选择器上。
     private void updateAmPmControl() {
         if (mIs24HourView) {
             mAmPmSpinner.setVisibility(View.GONE);
@@ -458,6 +477,7 @@ public class DateTimePicker extends FrameLayout {
         }
     }
 
+    // 更新小时控件。根据当前日期时间对象中的小时值，计算出小时显示字符串，并设置到小时选择器上。
     private void updateHourControl() {
         if (mIs24HourView) {
             mHourSpinner.setMinValue(HOUR_SPINNER_MIN_VAL_24_HOUR_VIEW);
@@ -476,6 +496,8 @@ public class DateTimePicker extends FrameLayout {
         mOnDateTimeChangedListener = callback;
     }
 
+    // 日期时间改变监听器。当用户改变日期时间时，调用这个方法。
+    // 如果设置了日期时间改变监听器，则调用监听器的方法，并将当前选择的日期时间传递给监听器。
     private void onDateTimeChanged() {
         if (mOnDateTimeChangedListener != null) {
             mOnDateTimeChangedListener.onDateTimeChanged(this, getCurrentYear(),
